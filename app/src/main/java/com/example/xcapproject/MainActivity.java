@@ -2,11 +2,13 @@ package com.example.xcapproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     PackageManager packageManager;
     private static final String TAG = "MyActivity";
+    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+
     private List<String> getApplications() {
         List<String> result = new ArrayList<>();
 
@@ -32,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         return result;
     }
-
-
 
     private String formatPermission(String unformattedPermission) {
         String[] split = unformattedPermission.split("\\.");
@@ -95,6 +97,19 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    public List<Map<Integer, List<AndroidPermissions>>> getPermissionsOfAllApps() {
+        List<Map<Integer, List<AndroidPermissions>>> result = new ArrayList<>();
+        List<String> apps = getApplications();
+        for (String app : apps) {
+            Log.d(TAG, app);
+            Map<Integer, List<AndroidPermissions>>  map = getPermissions(app);
+            result.add(map);
+            Log.d(TAG, map.toString());
+        }
+        return result;
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
         this.packageManager = getPackageManager();
 
-        List<String> apps = getApplications();
-        for (String app : apps) {
-            Log.d(TAG, app);
-            Map<Integer, List<AndroidPermissions>>  map = getPermissions(app);
-            Log.d(TAG, map.toString());
-        }
 
+
+    }
+
+    public void send(View view) {
+        Intent intent = new Intent(this, AnotherActivity.class);
+//        intent.putExtra(EXTRA_MESSAGE, this.getPermissionsOfAllApps());
+        intent.putExtra(EXTRA_MESSAGE, "This is a test");
+        startActivity(intent);
     }
 }
