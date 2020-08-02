@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class AnotherActivity extends AppCompatActivity {
 
     public String TAG = "AnotherAct";
@@ -15,8 +18,10 @@ public class AnotherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_another);
 
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-        Log.d(TAG, message);
+        HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
+                (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
+                intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+        Log.d(TAG, message.toString());
 
     }
 }

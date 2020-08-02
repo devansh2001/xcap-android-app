@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyActivity";
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
-    private List<String> getApplications() {
-        List<String> result = new ArrayList<>();
+    private ArrayList<String> getApplications() {
+        ArrayList<String> result = new ArrayList<>();
 
         List<ApplicationInfo> applications = packageManager.getInstalledApplications(
                 PackageManager.GET_META_DATA);
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         return split[split.length - 1];
     }
 
-    private Map<Integer, List<AndroidPermissions>> getPermissions(String applicationPackageName) {
-        Map<Integer, List<AndroidPermissions>> result = new HashMap<>();
+    private HashMap<Integer, ArrayList<AndroidPermissions>> getPermissions(String applicationPackageName) {
+        HashMap<Integer, ArrayList<AndroidPermissions>> result = new HashMap<>();
         PackageInfo packageInfo;
 
         try {
@@ -81,11 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 int group = permission.getGroup();
 
                 if (result.containsKey(group)) {
-                    List<AndroidPermissions> alreadyInMap = result.get(group);
+                    ArrayList<AndroidPermissions> alreadyInMap = result.get(group);
                     alreadyInMap.add(permission);
                     result.put(group, alreadyInMap);
                 } else {
-                    List<AndroidPermissions> list = new ArrayList<>();
+                    ArrayList<AndroidPermissions> list = new ArrayList<>();
                     list.add(permission);
                     result.put(group, list);
                 }
@@ -97,13 +97,13 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
-    public List<Map<Integer, List<AndroidPermissions>>> getPermissionsOfAllApps() {
-        List<Map<Integer, List<AndroidPermissions>>> result = new ArrayList<>();
-        List<String> apps = getApplications();
+    public HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> getPermissionsOfAllApps() {
+        HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> result = new HashMap<>();
+        ArrayList<String> apps = getApplications();
         for (String app : apps) {
             Log.d(TAG, app);
-            Map<Integer, List<AndroidPermissions>>  map = getPermissions(app);
-            result.add(map);
+            HashMap<Integer, ArrayList<AndroidPermissions>>  map = getPermissions(app);
+            result.put(app, map);
             Log.d(TAG, map.toString());
         }
         return result;
@@ -116,15 +116,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.packageManager = getPackageManager();
-
-
-
     }
 
     public void send(View view) {
         Intent intent = new Intent(this, AnotherActivity.class);
-//        intent.putExtra(EXTRA_MESSAGE, this.getPermissionsOfAllApps());
-        intent.putExtra(EXTRA_MESSAGE, "This is a test");
+        intent.putExtra(EXTRA_MESSAGE, this.getPermissionsOfAllApps());
         startActivity(intent);
     }
 }
