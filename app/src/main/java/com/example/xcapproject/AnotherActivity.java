@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -26,12 +28,17 @@ public class AnotherActivity extends AppCompatActivity {
                 intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
         Log.d(TAG, message.toString());
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayout);
-        for (int i = 0; i < 10; i++) {
-            CheckBox btn = new CheckBox(this);
-            btn.setText("Work!");
-            layout.addView(btn);
-        }
+//        LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayout);
+//        for (int i = 0; i < 10; i++) {
+//            CheckBox btn = new CheckBox(this);
+//            btn.setText("Work!");
+//            layout.addView(btn);
+//        }
+
+        WebView view = (WebView) findViewById(R.id.webView);
+        view.setWebViewClient(new WebViewClient());
+        view.getSettings().setJavaScriptEnabled(true);
+        view.loadUrl("https://www.google.com");
 
 
 
