@@ -17,7 +17,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AnotherActivity extends AppCompatActivity {
 
@@ -31,7 +35,30 @@ public class AnotherActivity extends AppCompatActivity {
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                 intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
-        Log.d(TAG, message.toString());
+        JSONObject json = new JSONObject();
+        for (String app : message.keySet()) {
+            ArrayList<AndroidPermissions> compiledList = new ArrayList<>();
+            for (ArrayList<AndroidPermissions> list : message.get(app).values()) {
+                compiledList.addAll(list);
+            }
+            try {
+                json.put(app, compiledList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            Log.d(TAG, json.toString(4));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        try {
+//            Log.d(TAG, new JSONObject(message).toString(4));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
 //        LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayout);
 //        for (int i = 0; i < 10; i++) {
@@ -44,7 +71,7 @@ public class AnotherActivity extends AppCompatActivity {
         view.setWebChromeClient(new WebChromeClient());
         view.setWebViewClient(new WebViewClient());
         view.getSettings().setJavaScriptEnabled(true);
-        view.addJavascriptInterface(new WebAppInterface(this, message.keySet()), "Android");
+        view.addJavascriptInterface(new WebAppInterface(this, json), "Android");
         view.loadUrl("http://localhost:3000");
 
 
@@ -54,14 +81,14 @@ public class AnotherActivity extends AppCompatActivity {
 
 class WebAppInterface {
     Context mContext;
-    Set<String> set;
+    JSONObject json;
     public String TAG = "AnotherAct";
     /** Instantiate the interface and set the context */
-    WebAppInterface(Context c, Set<String> set) {
+    WebAppInterface(Context c, JSONObject json) {
         mContext = c;
-        this.set = set;
+        this.json = json;
         Log.d(TAG, "GOT CONSTRUCTOR DATA");
-        Log.d(TAG, set.toString());
+        Log.d(TAG, json.toString());
     }
 
     /** Show a toast from the web page */
@@ -72,7 +99,7 @@ class WebAppInterface {
 
     @JavascriptInterface
     public String showKeySet() {
-        return set.toString();
+        return json.toString();
     }
 
 }
