@@ -26,6 +26,7 @@ import org.json.JSONObject;
 public class AnotherActivity extends AppCompatActivity {
 
     public String TAG = "AnotherAct";
+    public final String URL = "https://xcap-react-app-prd.herokuapp.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,7 @@ public class AnotherActivity extends AppCompatActivity {
         view.setWebViewClient(new WebViewClient());
         view.getSettings().setJavaScriptEnabled(true);
         view.addJavascriptInterface(new WebAppInterface(this, json), "Android");
-        view.loadUrl("http://localhost:3000");
+        view.loadUrl(this.URL);
 
 
 
