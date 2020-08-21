@@ -1,29 +1,38 @@
 package com.example.xcapproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     PackageManager packageManager;
     private static final String TAG = "MyActivity";
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    public static final String UNIQUE_ID = "";
     private final int SPLASH_DISPLAY_LENGTH = 2000;
 
     private ArrayList<String> getApplications() {
@@ -116,10 +125,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         this.packageManager = getPackageManager();
 
+//        Calendar calendar = Calendar.getInstance();
+//        Log.d(TAG, calendar.getTimeInMillis() + "");
+//        calendar.set(Calendar.HOUR_OF_DAY, 9);
+//        calendar.set(Calendar.MINUTE, 39);
+//        calendar.set(Calendar.SECOND, 0);
+//        Log.d(TAG, calendar.getTimeInMillis() + "");
+//        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+//        intent.setAction("my_notif");
+//
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
         new Handler().postDelayed(new Runnable(){
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
