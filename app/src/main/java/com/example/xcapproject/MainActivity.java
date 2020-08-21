@@ -4,6 +4,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -46,6 +48,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return result;
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel1 = new NotificationChannel(
+                    "channel1",
+                    "Channel 1",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel1.setDescription("This is channel 1");
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel1);
+        }
+
     }
 
     private String formatPermission(String unformattedPermission) {
@@ -127,17 +143,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.packageManager = getPackageManager();
 
+        createNotificationChannel();
+
 //        Calendar calendar = Calendar.getInstance();
 //        Log.d(TAG, calendar.getTimeInMillis() + "");
 //        calendar.set(Calendar.HOUR_OF_DAY, 9);
 //        calendar.set(Calendar.MINUTE, 39);
 //        calendar.set(Calendar.SECOND, 0);
 //        Log.d(TAG, calendar.getTimeInMillis() + "");
-//        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
 //        intent.setAction("my_notif");
 //
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        long time = System.currentTimeMillis();
+        long ten = 10 * 1000;
+        alarmManager.set(AlarmManager.RTC_WAKEUP, time + ten, pendingIntent);
 //
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
