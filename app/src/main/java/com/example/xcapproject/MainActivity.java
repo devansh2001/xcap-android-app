@@ -186,9 +186,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(isFirstKey, false);
             editor.apply();
-
         } else {
-
             int lowerBound = EARLIEST_NOTIFICATION_HOUR;
             int upperBound = MIDDLE_NOTIFICATION_HOUR;
 
