@@ -156,17 +156,21 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        final String isFirstKey = "XCAP_IS_FIRST";
+        final String isFirstKey = "XCAP_IS_FIRST_IN_DAY";
         boolean isFirst = false;
         if (sharedPreferences.contains(isFirstKey)) {
             Log.d(TAG, "Found String");
             isFirst = sharedPreferences.getBoolean(isFirstKey, false);
             Log.d(TAG, sharedPreferences.getBoolean(isFirstKey, false) + "");
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.remove(isFirstKey);
+//            editor.apply();
         } else {
             Log.d(TAG, "Absent String");
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(isFirstKey, true);
             editor.apply();
+            isFirst = true;
             Log.d(TAG, "Added Boolean : " + true);
         }
 
@@ -174,7 +178,8 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(Calendar.YEAR);
 
         if (isFirst) {
-            int lowerBound = Calendar.HOUR_OF_DAY;
+            Log.d(TAG, "First in the day");
+            int lowerBound = Calendar.HOUR_OF_DAY + 1;
             int upperBound = LATEST_NOTIFICATION_HOUR - 1;
 
             int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
@@ -182,11 +187,14 @@ public class MainActivity extends AppCompatActivity {
 
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
+            Log.d(TAG, calendar.toString());
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(isFirstKey, false);
             editor.apply();
+            Log.d(TAG, "Set boolean to false");
         } else {
+            Log.d(TAG, "NOT First in the day");
             int lowerBound = EARLIEST_NOTIFICATION_HOUR;
             int upperBound = MIDDLE_NOTIFICATION_HOUR;
 
@@ -196,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
             calendar.add(Calendar.DATE, 1);
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
+            Log.d(TAG, calendar.toString());
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(isFirstKey, true);
             editor.apply();
+            Log.d(TAG, "Set boolean to true");
         }
 
 //        Log.d(TAG, calendar.getTimeInMillis() + "");
@@ -215,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        long time = System.currentTimeMillis();
 //        long ten = 10 * 1000;
+        Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 //
 //        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
