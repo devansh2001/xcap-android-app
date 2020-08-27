@@ -153,9 +153,9 @@ public class MainActivity extends AppCompatActivity {
         this.packageManager = getPackageManager();
 
         createNotificationChannel();
-
+//
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
+//
         final String isFirstKey = "XCAP_IS_FIRST_IN_DAY";
         boolean isFirst = false;
         if (sharedPreferences.contains(isFirstKey)) {
@@ -173,17 +173,23 @@ public class MainActivity extends AppCompatActivity {
             isFirst = true;
             Log.d(TAG, "Added Boolean : " + true);
         }
-
+//
         Calendar calendar = Calendar.getInstance();
         System.out.println(Calendar.YEAR);
-
+        System.out.println(calendar.getTimeInMillis() + " " + calendar.toString());
+//
         if (isFirst) {
             Log.d(TAG, "First in the day");
-            int lowerBound = Calendar.HOUR_OF_DAY + 1;
+
+            int lowerBound = calendar.get(Calendar.HOUR_OF_DAY) + 1;
             int upperBound = LATEST_NOTIFICATION_HOUR - 1;
+
+            System.out.println(lowerBound + " , " + upperBound);
 
             int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
             int minute = (int) Math.random() * 60;
+
+            System.out.println(hour + " : " + minute);
 
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
@@ -200,6 +206,8 @@ public class MainActivity extends AppCompatActivity {
 
             int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
             int minute = (int) Math.random() * 60;
+
+            System.out.println(hour + " : " + minute);
 
             calendar.add(Calendar.DATE, 1);
             calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -218,17 +226,18 @@ public class MainActivity extends AppCompatActivity {
 //        calendar.set(Calendar.SECOND, 0);
 //        Log.d(TAG, calendar.getTimeInMillis() + "");
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
-//        intent.setAction("my_notif");
-//
+////        intent.setAction("my_notif");
+////
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
-//        long time = System.currentTimeMillis();
-//        long ten = 10 * 1000;
-        Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 //
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+////        long time = System.currentTimeMillis();
+////        long ten = 10 * 1000;
+        Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+//        System.out.println(alarmManager.getNextAlarmClock().getTriggerTime());
+//
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
