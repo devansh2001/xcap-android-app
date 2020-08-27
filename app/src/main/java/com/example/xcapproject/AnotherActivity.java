@@ -47,18 +47,16 @@ public class AnotherActivity extends AppCompatActivity {
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                 intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
         JSONObject json = new JSONObject();
-        int count = 0;
         for (String app : message.keySet()) {
-            if (count > 4) {
-                continue;
-            }
-            count++;
             ArrayList<AndroidPermissions> compiledList = new ArrayList<>();
             for (ArrayList<AndroidPermissions> list : message.get(app).values()) {
                 compiledList.addAll(list);
             }
             try {
                 json.put(app, compiledList);
+                System.out.println(app);
+                System.out.println(compiledList);
+                System.out.println("*****");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

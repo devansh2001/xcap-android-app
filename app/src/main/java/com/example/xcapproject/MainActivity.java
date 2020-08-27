@@ -133,6 +133,38 @@ public class MainActivity extends AppCompatActivity {
         return result;
     }
 
+    public void removeAppsWithNoPermissions(
+            HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> map
+            ) {
+        if (map == null) {
+            return;
+        }
+
+        List<String> toRemoveFromMap = new ArrayList<>();
+
+        for (String key : map.keySet()) {
+            HashMap<Integer, ArrayList<AndroidPermissions>> value = map.get(key);
+            boolean valid = false;
+
+            for (int permissionId : value.keySet()) {
+                ArrayList<AndroidPermissions> permissions = value.get(permissionId);
+                if (permissions != null && permissions.size() != 0) {
+                    valid = true;
+                    break;
+                }
+            }
+
+
+            if (!valid) {
+                toRemoveFromMap.add(key);
+            }
+        }
+
+        for (String toRemoveKey : toRemoveFromMap) {
+            map.remove(toRemoveKey);
+        }
+    }
+
     public HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> getPermissionsOfAllApps() {
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> result = new HashMap<>();
         ArrayList<String> apps = getApplications();
@@ -142,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
             result.put(app, map);
             Log.d(TAG, map.toString());
         }
+
+        removeAppsWithNoPermissions(result);
         return result;
 
     }
