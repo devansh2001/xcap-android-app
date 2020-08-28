@@ -8,18 +8,23 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#6200ee"
             android:gravity="center"
-            android:background="#FFFFFF"
+            android:text="@string/xcap_research_2020"
             android:textColor="#FFFFFF"
             android:textSize="40dp"
-            android:text="XCAP Research 2020" />
+            android:textStyle="bold" />
 
     </LinearLayout>
 

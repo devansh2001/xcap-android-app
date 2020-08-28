@@ -33,7 +33,7 @@ import org.json.JSONObject;
 public class AnotherActivity extends AppCompatActivity {
 
     public String TAG = "AnotherAct";
-    public final String URL = "https://xcap-react-app-stg.herokuapp.com";
+    public final String URL = "https://xcap-react-app-prd.herokuapp.com";
 //    public final String URL = "http://localhost:3000";
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
