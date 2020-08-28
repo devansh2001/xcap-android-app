@@ -45,7 +45,9 @@ public class AnotherActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
-                intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+                intent.getSerializableExtra(MainActivity.APP_DATA);
+
+        HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
         JSONObject json = new JSONObject();
         for (String app : message.keySet()) {
             ArrayList<AndroidPermissions> compiledList = new ArrayList<>();
@@ -53,7 +55,8 @@ public class AnotherActivity extends AppCompatActivity {
                 compiledList.addAll(list);
             }
             try {
-                json.put(app, compiledList);
+                String appName = packageNameToAppNameMap == null ? app : packageNameToAppNameMap.getOrDefault(app, "");
+                json.put(appName, compiledList);
                 System.out.println(app);
                 System.out.println(compiledList);
                 System.out.println("*****");

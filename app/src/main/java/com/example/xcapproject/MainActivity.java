@@ -39,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
     PackageManager packageManager;
     private static final String TAG = "MyActivity";
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
-    public static final String UNIQUE_ID = "";
+    public static final String APP_DATA = "com.example.myfirstapp.MESSAGE";
+    public static final String APP_NAME_MAP = "xcap.app.name.map"; // NOT USED
     private final int SPLASH_DISPLAY_LENGTH = 2000;
     private final int EARLIEST_NOTIFICATION_HOUR = 10;
     private final int LATEST_NOTIFICATION_HOUR = 20;
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
+    public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
 
     private ArrayList<String> getApplications() {
         ArrayList<String> result = new ArrayList<>();
@@ -53,8 +54,14 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.GET_META_DATA);
 
         for (ApplicationInfo applicationInfo : applications) {
+            String packageName = applicationInfo.packageName;
+            String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
+            packageNameToAppNameMap.put(packageName, appName);
         }
+
+        System.out.println("Final Map");
+        System.out.println(packageNameToAppNameMap);
 
         return result;
     }
@@ -167,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
     public HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> getPermissionsOfAllApps() {
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> result = new HashMap<>();
+//        packageNameToAppNameMap = new HashMap<>();
         ArrayList<String> apps = getApplications();
         for (String app : apps) {
             Log.d(TAG, app);
@@ -280,16 +288,18 @@ public class MainActivity extends AppCompatActivity {
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(MainActivity.this, AnotherActivity.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());
-                mainIntent.putExtra(EXTRA_MESSAGE, MainActivity.this.getPermissionsOfAllApps());
+                mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
+//                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);
                 MainActivity.this.startActivity(mainIntent);
                 MainActivity.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }
 
+    // NOT USED
     public void send(View view) {
         Intent intent = new Intent(this, AnotherActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, this.getPermissionsOfAllApps());
+        intent.putExtra(APP_DATA, this.getPermissionsOfAllApps());
         startActivity(intent);
     }
 }
