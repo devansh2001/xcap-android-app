@@ -20,8 +20,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel1")
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentIntent(pendingIntent)
-                .setContentTitle("This is a test")
-                .setContentText("ABCD")
+                .setContentTitle("REMINDER: Fill XCAP Survey")
+                .setContentText("Touch here / open the app to fill the XCAP ResearchSurvey")
                 .setAutoCancel(true);
 
         notificationManager.notify(100, builder.build());
