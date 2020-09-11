@@ -47,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
 
+    // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
+    boolean isValidApp(ApplicationInfo applicationInfo) {
+        int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+        return (applicationInfo.flags & mask) == 0;
+    }
+
     private ArrayList<String> getApplications() {
         ArrayList<String> result = new ArrayList<>();
 
@@ -54,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.GET_META_DATA);
 
         for (ApplicationInfo applicationInfo : applications) {
+            if (!isValidApp(applicationInfo)) {
+                continue;
+            }
             String packageName = applicationInfo.packageName;
             String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
