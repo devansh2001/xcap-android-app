@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,7 +14,9 @@ import android.text.PrecomputedText;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -33,7 +36,7 @@ import org.json.JSONObject;
 public class AnotherActivity extends AppCompatActivity {
 
     public String TAG = "AnotherAct";
-    public final String URL = "https://xcap-react-app-prd.herokuapp.com";
+    public final String URL = "https://xcap-react-app-stg.herokuapp.com";
 //    public final String URL = "http://localhost:3000";
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -111,8 +114,35 @@ public class AnotherActivity extends AppCompatActivity {
                 return true;
             }
         });
-        view.setWebViewClient(new WebViewClient());
+        view.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url)
+            {
+                //do whatever you want with url
+                System.out.println(url);
+                System.out.println("THIS IS MY URL HAHA");
+                view.loadUrl(url);
+                return true;
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//              super.onReceivedSslError(view, handler, error);
+
+                Log.e(TAG, "onReceivedSslError...");
+                Log.e(TAG, "Error: " + error);
+                handler.proceed();
+            }
+        });
+
         view.getSettings().setJavaScriptEnabled(true);
+        view.getSettings().setDomStorageEnabled(true);
+        view.getSettings().setLoadsImagesAutomatically(true);
+        view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        view.getSettings().setDatabaseEnabled(true);
+        view.getSettings().setAppCacheEnabled(true);
+        view.getSettings().setMinimumFontSize(1);
+        view.getSettings().setMinimumLogicalFontSize(1);
         Log.d(TAG, "Passing JSON");
         Log.d(TAG, json.toString());
         view.addJavascriptInterface(new WebAppInterface(this, json), "Android");
