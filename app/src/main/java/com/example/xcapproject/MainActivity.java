@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(Calendar.YEAR);
         System.out.println(calendar.getTimeInMillis() + " " + calendar.toString());
 //
-        if (isFirst) {
+        if (isFirst || Calendar.HOUR_OF_DAY < LATEST_NOTIFICATION_HOUR) {
             Log.d(TAG, "First in the day");
 
             int lowerBound = calendar.get(Calendar.HOUR_OF_DAY) + 1;
@@ -288,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
 ////        long time = System.currentTimeMillis();
 ////        long ten = 10 * 1000;
         Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
+        Log.d(TAG, "Set alarm " + calendar.getTime().toString());
         Toast.makeText(this, calendar.getTime().toString(), Toast.LENGTH_LONG).show();
 //        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 //        System.out.println(alarmManager.getNextAlarmClock().getTriggerTime());
