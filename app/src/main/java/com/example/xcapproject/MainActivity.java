@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -203,6 +204,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.packageManager = getPackageManager();
 
+        System.out.println("THIS IS SCREEN 1");
+
         createNotificationChannel();
 //
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -285,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
 ////        long time = System.currentTimeMillis();
 ////        long ten = 10 * 1000;
         Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
+        Toast.makeText(this, calendar.getTime().toString(), Toast.LENGTH_LONG).show();
 //        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 //        System.out.println(alarmManager.getNextAlarmClock().getTriggerTime());
 //

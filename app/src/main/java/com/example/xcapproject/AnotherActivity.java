@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.PrecomputedText;
 import android.util.Log;
+import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
@@ -22,6 +23,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class AnotherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_another);
-
+        System.out.println("THIS IS SCREEN 2");
         Intent intent = getIntent();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
@@ -106,12 +108,28 @@ public class AnotherActivity extends AppCompatActivity {
 //        }
 
         WebView view = (WebView) findViewById(R.id.webView);
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        view.setVisibility(View.GONE);
         view.setWebChromeClient(new WebChromeClient() {
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 Log.d("MyApplication", cm.message() + " -- From line "
                         + cm.lineNumber() + " of "
                         + cm.sourceId() );
                 return true;
+            }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
+
+                Log.d("MyApplication", newProgress + " is progress");
+
+                super.onProgressChanged(view, newProgress);
+
+                if (newProgress >= 90) {
+                    view.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
+                }
             }
         });
         view.setWebViewClient(new WebViewClient() {
