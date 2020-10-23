@@ -1,5 +1,6 @@
 package com.example.xcapproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,7 +16,6 @@ public class UserIdCollector extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        findViewById(R.id.)
         setContentView(R.layout.activity_user_id);
 
         Button button = (Button) findViewById(R.id.userIdButton);
@@ -36,6 +36,10 @@ public class UserIdCollector extends AppCompatActivity {
                 editor.apply();
 
                 System.out.println(userId);
+
+                Intent mainIntent = new Intent(UserIdCollector.this, MainActivity.class);
+                UserIdCollector.this.startActivity(mainIntent);
+                UserIdCollector.this.finish();
             }
         });
     }
