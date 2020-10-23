@@ -39,7 +39,7 @@ public class AnotherActivity extends AppCompatActivity {
 
     public String TAG = "AnotherAct";
     public final String URL = "https://xcap-react-app-prd.herokuapp.com";
-//    public final String URL = "http://localhost:3000";
+//    public final String URL = "http://www.google.com";
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +161,8 @@ public class AnotherActivity extends AppCompatActivity {
         view.getSettings().setAppCacheEnabled(true);
         view.getSettings().setMinimumFontSize(1);
         view.getSettings().setMinimumLogicalFontSize(1);
+        view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         Log.d(TAG, "Passing JSON");
         Log.d(TAG, json.toString());
         view.addJavascriptInterface(new WebAppInterface(this, json), "Android");
