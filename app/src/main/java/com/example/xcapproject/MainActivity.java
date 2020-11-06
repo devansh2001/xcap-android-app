@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -198,6 +200,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public String getDateString(Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String dateString = String.format("%d-%d-%d", year, month, day);
+
+        System.out.println(dateString);
+
+        return dateString;
+    }
+
+    public boolean getAndSet(Calendar calendar) {
+
+        final String keyString = "XCAP_LAST_UPDATED_DATE";
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String currentString = "";
+        String dateString = getDateString(calendar);
+
+        if (sharedPreferences.contains(keyString)) {
+            currentString = sharedPreferences.getString(keyString, "");
+        }
+
+        System.out.println("GET AND SET RUN SUMMARY");
+        System.out.println(dateString + " was datestring");
+        System.out.println(dateString + " was currentString");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(keyString, dateString);
+        editor.apply();
+
+        return currentString.equals(dateString);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,48 +266,85 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         System.out.println(Calendar.YEAR);
         System.out.println(calendar.getTimeInMillis() + " " + calendar.toString());
-//
-        if (isFirst || Calendar.HOUR_OF_DAY < LATEST_NOTIFICATION_HOUR) {
-            Log.d(TAG, "First in the day");
 
-            int lowerBound = calendar.get(Calendar.HOUR_OF_DAY) + 1;
-            int upperBound = LATEST_NOTIFICATION_HOUR - 1;
 
-            System.out.println(lowerBound + " , " + upperBound);
+        boolean isSameDay = getAndSet(calendar);
+        System.out.println(isSameDay + " isSameDay");
 
-            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
-            int minute = (int) Math.random() * 60;
-
-            System.out.println(hour + " : " + minute);
-
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, minute);
-            Log.d(TAG, calendar.toString());
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(isFirstKey, false);
-            editor.apply();
-            Log.d(TAG, "Set boolean to false");
-        } else {
-            Log.d(TAG, "NOT First in the day");
+        if (isSameDay) {
+            // Means that we need to set an alarm for tomorrow
             int lowerBound = EARLIEST_NOTIFICATION_HOUR;
             int upperBound = MIDDLE_NOTIFICATION_HOUR;
 
-            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
-            int minute = (int) Math.random() * 60;
+            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound));
+            int minute = (int) (Math.random() * 60);
 
-            System.out.println(hour + " : " + minute);
+            System.out.println(hour + " " + minute);
 
             calendar.add(Calendar.DATE, 1);
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
-            Log.d(TAG, calendar.toString());
+            calendar.set(Calendar.SECOND, 0);
+        } else {
+            // Means that we need to set an alarm for today
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(isFirstKey, true);
-            editor.apply();
-            Log.d(TAG, "Set boolean to true");
+            int lowerBound = MIDDLE_NOTIFICATION_HOUR;
+            int upperBound = LATEST_NOTIFICATION_HOUR;
+
+            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound));
+            int minute = (int) (Math.random() * 60);
+
+            System.out.println(hour + " " + minute);
+
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            calendar.set(Calendar.SECOND, 0);
+
         }
+
+
+//
+//        if (isFirst || Calendar.HOUR_OF_DAY < LATEST_NOTIFICATION_HOUR) {
+//            Log.d(TAG, "First in the day");
+//
+//            int lowerBound = calendar.get(Calendar.HOUR_OF_DAY) + 1;
+//            int upperBound = LATEST_NOTIFICATION_HOUR - 1;
+//
+//            System.out.println(lowerBound + " , " + upperBound);
+//
+//            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
+//            int minute = (int) Math.random() * 60;
+//
+//            System.out.println(hour + " : " + minute);
+//
+//            calendar.set(Calendar.HOUR_OF_DAY, hour);
+//            calendar.set(Calendar.MINUTE, minute);
+//            Log.d(TAG, calendar.toString());
+//
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putBoolean(isFirstKey, false);
+//            editor.apply();
+//            Log.d(TAG, "Set boolean to false");
+//        } else {
+//            Log.d(TAG, "NOT First in the day");
+//            int lowerBound = EARLIEST_NOTIFICATION_HOUR;
+//            int upperBound = MIDDLE_NOTIFICATION_HOUR;
+//
+//            int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound + 1));
+//            int minute = (int) Math.random() * 60;
+//
+//            System.out.println(hour + " : " + minute);
+//
+//            calendar.add(Calendar.DATE, 1);
+//            calendar.set(Calendar.HOUR_OF_DAY, hour);
+//            calendar.set(Calendar.MINUTE, minute);
+//            Log.d(TAG, calendar.toString());
+//
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.putBoolean(isFirstKey, true);
+//            editor.apply();
+//            Log.d(TAG, "Set boolean to true");
+//        }
 
 //        Log.d(TAG, calendar.getTimeInMillis() + "");
 //        calendar.set(Calendar.HOUR_OF_DAY, 9);
