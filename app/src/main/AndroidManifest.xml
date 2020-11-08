@@ -20,6 +20,12 @@
             </intent-filter>
         </activity>
         <receiver android:name="com.devansh.xcapproject.NotificationReceiver" />
+<!--        CREDITS : https://www.youtube.com/watch?v=1lT0ZliubU0 -->
+        <service android:name=".FirebaseReceiver">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 
