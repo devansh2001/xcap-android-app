@@ -1,4 +1,4 @@
-package com.example.xcapproject;
+package com.devansh.xcapproject;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +10,6 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.PrecomputedText;
 import android.util.Log;
 import android.view.View;
 import android.webkit.ConsoleMessage;
@@ -20,16 +19,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.json.JSONException;

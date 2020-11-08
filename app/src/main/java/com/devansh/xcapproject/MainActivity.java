@@ -1,4 +1,4 @@
-package com.example.xcapproject;
+package com.devansh.xcapproject;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,29 +20,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import org.json.JSONException;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
     PackageManager packageManager;
     private static final String TAG = "MyActivity";
-    public static final String APP_DATA = "com.example.myfirstapp.MESSAGE";
+    public static final String APP_DATA = "com.devansh.myfirstapp.MESSAGE";
     public static final String APP_NAME_MAP = "xcap.app.name.map"; // NOT USED
     private final int SPLASH_DISPLAY_LENGTH = 2000;
     private final int EARLIEST_NOTIFICATION_HOUR = 10;

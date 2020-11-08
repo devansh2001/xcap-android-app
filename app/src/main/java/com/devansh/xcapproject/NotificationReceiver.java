@@ -1,6 +1,5 @@
-package com.example.xcapproject;
+package com.devansh.xcapproject;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;

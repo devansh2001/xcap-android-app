@@ -1,4 +1,4 @@
-package com.example.xcapproject;
+package com.devansh.xcapproject;
 
 public enum AndroidPermissions {
     ACCESS_BACKGROUND_LOCATION(1),
