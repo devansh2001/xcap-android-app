@@ -20,10 +20,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private final int LATEST_NOTIFICATION_HOUR = 20;
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
+
+    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
 
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
     boolean isValidApp(ApplicationInfo applicationInfo) {
@@ -358,6 +373,51 @@ public class MainActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
+                // API call here
+                // https://trinitytuts.com/get-and-post-request-using-okhttp-in-android-application/
+                try {
+
+                    System.out.println("Making call");
+                    OkHttpClient client = new OkHttpClient();
+
+                    JSONObject dict = new JSONObject();
+                    dict.put("notification_time", "temp");
+                    dict.put("device_id", "abcd");
+
+                    RequestBody body = RequestBody.create(MediaType.parse("application/json"),
+                            dict.toString());
+
+                    HttpUrl localUrl = HttpUrl.parse(NOTIFICATION_SERVICE_URL + "/schedule-notification");
+                    Request request = new Request.Builder()
+                            .url(localUrl)
+                            .post(body)
+                            .header("Accept", "application/json")
+                            .header("Content-Type", "application/json")
+                            .header("Access-Control-Allow-Origin", "*")
+                            .build();
+
+//                    Response response = client.newCall(request).execute();
+//                    System.out.println(response.body().string());
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            String mMessage = e.getMessage().toString();
+                            Log.w("failure Response", mMessage);
+                            //call.cancel();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                            String mMessage = response.body().string();
+                            Log.e("OKTTP", mMessage);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(MainActivity.this, AnotherActivity.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());
