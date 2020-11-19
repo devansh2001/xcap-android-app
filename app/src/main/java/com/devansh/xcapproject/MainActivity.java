@@ -1,5 +1,6 @@
 package com.devansh.xcapproject;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
 
@@ -369,6 +374,29 @@ public class MainActivity extends AppCompatActivity {
 //
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
+        final String[] deviceId = {""};
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FCMStuff", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        deviceId[0] = token;
+
+                        // Log and toast
+//                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("FCMStuff", token);
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -382,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
 
                     JSONObject dict = new JSONObject();
                     dict.put("notification_time", "temp");
-                    dict.put("device_id", "abcd");
+                    dict.put("device_id", deviceId[0]);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"),
                             dict.toString());
