@@ -207,6 +207,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public String getDateTimeString(Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+
+        return String.format("%d-%d-%d %d:%d:%d", year, month, day, hour, minute, seconds);
+
+    }
+
     public String getDateString(Calendar calendar) {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -397,6 +410,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+        final String dateString = getDateTimeString(calendar);
+        System.out.println(dateString);
+        System.out.println("Date String");
+
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -409,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
                     OkHttpClient client = new OkHttpClient();
 
                     JSONObject dict = new JSONObject();
-                    dict.put("notification_time", "temp");
+                    dict.put("notification_time", dateString);
                     dict.put("device_id", deviceId[0]);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"),
