@@ -1,5 +1,6 @@
 package com.devansh.xcapproject;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,10 +21,27 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private final int LATEST_NOTIFICATION_HOUR = 20;
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
+
+    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
 
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
     boolean isValidApp(ApplicationInfo applicationInfo) {
@@ -184,6 +204,19 @@ public class MainActivity extends AppCompatActivity {
 
         removeAppsWithNoPermissions(result);
         return result;
+
+    }
+
+    public String getDateTimeString(Calendar calendar) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int seconds = calendar.get(Calendar.SECOND);
+
+        return String.format("%d-%d-%d %d:%d:%d", year, month, day, hour, minute, seconds);
 
     }
 
@@ -354,10 +387,82 @@ public class MainActivity extends AppCompatActivity {
 //
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
+        final String[] deviceId = {""};
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("FCMStuff", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        deviceId[0] = token;
+
+                        // Log and toast
+//                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("FCMStuff", token);
+//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        final String dateString = getDateTimeString(calendar);
+        System.out.println(dateString);
+        System.out.println("Date String");
+
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
+                // API call here
+                // https://trinitytuts.com/get-and-post-request-using-okhttp-in-android-application/
+                try {
+
+                    System.out.println("Making call");
+                    OkHttpClient client = new OkHttpClient();
+
+                    JSONObject dict = new JSONObject();
+                    dict.put("notification_time", dateString);
+                    dict.put("device_id", deviceId[0]);
+
+                    RequestBody body = RequestBody.create(MediaType.parse("application/json"),
+                            dict.toString());
+
+                    HttpUrl localUrl = HttpUrl.parse(NOTIFICATION_SERVICE_URL + "/schedule-notification");
+                    Request request = new Request.Builder()
+                            .url(localUrl)
+                            .post(body)
+                            .header("Accept", "application/json")
+                            .header("Content-Type", "application/json")
+                            .header("Access-Control-Allow-Origin", "*")
+                            .build();
+
+//                    Response response = client.newCall(request).execute();
+//                    System.out.println(response.body().string());
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            String mMessage = e.getMessage().toString();
+                            Log.w("failure Response", mMessage);
+                            //call.cancel();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+
+                            String mMessage = response.body().string();
+                            Log.e("OKTTP", mMessage);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(MainActivity.this, AnotherActivity.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());

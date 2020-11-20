@@ -6,10 +6,15 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -19,6 +24,12 @@ public class FirebaseReceiver extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
         showNotification();
 
+    }
+
+    @Override
+    public void onNewToken(@NonNull String s) {
+        super.onNewToken(s);
+        Log.d("NewToken", s);
     }
 
     public void showNotification() {
@@ -36,7 +47,7 @@ public class FirebaseReceiver extends FirebaseMessagingService {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 //            builder = builder.setContent(get)
 //        }
-        builder.setContentTitle("This is a Test").setContentText("This is also a test");
+        builder.setContentTitle("This is a Test").setContentText("This is also aaaa test");
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -45,6 +56,26 @@ public class FirebaseReceiver extends FirebaseMessagingService {
             manager.createNotificationChannel(channel);
             manager.notify(0, builder.build());
         }
+
+        // Source: https://firebase.google.com/docs/cloud-messaging/android/client
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.w("FCMStuff", "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        String token = task.getResult();
+//
+//                        // Log and toast
+////                        String msg = getString(R.string.msg_token_fmt, token);
+//                        Log.d("FCMStuff", token);
+////                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
 
     }
