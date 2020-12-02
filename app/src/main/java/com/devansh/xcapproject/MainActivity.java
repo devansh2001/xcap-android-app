@@ -55,12 +55,13 @@ public class MainActivity extends AppCompatActivity {
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
 
-    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
+//    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
+    final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
 
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
     boolean isValidApp(ApplicationInfo applicationInfo) {
         int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (applicationInfo.flags & mask) == 0;
+        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
     }
 
     private ArrayList<String> getApplications() {
