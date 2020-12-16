@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -231,6 +232,15 @@ public class MainActivity extends AppCompatActivity {
 
         return dateString;
     }
+    // https://stackoverflow.com/a/2595654
+    public String getNotificationTimeInUTC(Calendar calendar) {
+        Calendar deepCopy = (Calendar) calendar.clone();
+        deepCopy.setTimeZone(TimeZone.getTimeZone("UTC"));
+        System.out.println("Updated Notification Time");
+        System.out.println(getDateTimeString(deepCopy));
+        System.out.println(getDateTimeString(calendar));
+        return getDateTimeString(deepCopy);
+    }
 
     public boolean getAndSet(Calendar calendar) {
 
@@ -411,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        final String dateString = getDateTimeString(calendar);
+        final String dateString = getNotificationTimeInUTC(calendar);
         System.out.println(dateString);
         System.out.println("Date String");
 
