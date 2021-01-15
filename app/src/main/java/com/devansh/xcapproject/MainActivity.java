@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(MainActivity.this, AnotherActivity.class);
+                Intent mainIntent = new Intent(MainActivity.this, AppSelection.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());
                 mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
 //                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);

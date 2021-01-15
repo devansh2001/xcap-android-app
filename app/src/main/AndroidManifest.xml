@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.devansh.xcapproject.AnotherActivity"/>
         <activity android:name="com.devansh.xcapproject.MainActivity"/>
+        <activity android:name="com.devansh.xcapproject.AppSelection"/>
         <activity android:name="com.devansh.xcapproject.UserIdCollector">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
