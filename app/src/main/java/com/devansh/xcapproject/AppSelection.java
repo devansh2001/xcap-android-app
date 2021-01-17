@@ -2,6 +2,7 @@ package com.devansh.xcapproject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.SparseBooleanArray;
@@ -13,8 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,37 +58,45 @@ public class AppSelection extends AppCompatActivity {
         Toast.makeText(this, str, Toast.LENGTH_LONG).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_selection);
 //        MainActivity.getPermissionsOfAllApps();
-        AppDetailsUtility utility = new AppDetailsUtility();
-        utility.onCreate(new Bundle());
-        Set<String> allApps = utility.getPermissionsOfAllApps().keySet();
-        System.out.println(allApps);
-        Map<String, Boolean> applicationPermissions = new HashMap<>();
+//        AppDetailsUtility utility = new AppDetailsUtility();
+//        utility.onCreate(new Bundle());
+//        Set<String> allApps = utility.getPermissionsOfAllApps().keySet();
+        HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
+                (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
+                        getIntent().getSerializableExtra(MainActivity.APP_DATA);
+        System.out.println("App Selection");
+        HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
+        System.out.println(message);
+//        Map<String, Boolean> applicationPermissions = new HashMap<>();
+//
+//        applicationPermissions.put("Facebook", true);
+//        applicationPermissions.put("Google", true);
+//        applicationPermissions.put("WhatsApp", false);
+//        applicationPermissions.put("Chrome", true);
+//        applicationPermissions.put("SnapChat", true);
+//        applicationPermissions.put("Chrome1", true);
+//        applicationPermissions.put("SnapChat1", true);
+//        applicationPermissions.put("Chrome2", true);
+//        applicationPermissions.put("SnapChat2", true);
+//        applicationPermissions.put("Chrome3", true);
+//        applicationPermissions.put("SnapChat3", true);
+//        applicationPermissions.put("SnapChat4", true);
+//        applicationPermissions.put("Chrome4", true);
+//        applicationPermissions.put("SnapChat5", true);
+//
+//        System.out.println(applicationPermissions.toString());
 
-        applicationPermissions.put("Facebook", true);
-        applicationPermissions.put("Google", true);
-        applicationPermissions.put("WhatsApp", false);
-        applicationPermissions.put("Chrome", true);
-        applicationPermissions.put("SnapChat", true);
-        applicationPermissions.put("Chrome1", true);
-        applicationPermissions.put("SnapChat1", true);
-        applicationPermissions.put("Chrome2", true);
-        applicationPermissions.put("SnapChat2", true);
-        applicationPermissions.put("Chrome3", true);
-        applicationPermissions.put("SnapChat3", true);
-        applicationPermissions.put("SnapChat4", true);
-        applicationPermissions.put("Chrome4", true);
-        applicationPermissions.put("SnapChat5", true);
 
-        System.out.println(applicationPermissions.toString());
-
-        String[] apps = new String[applicationPermissions.size()];
+        String[] apps = new String[message.size()];
         int i = 0;
-        for (String appName : applicationPermissions.keySet()) {
+        for (String appPackage : message.keySet()) {
+            String appName = packageNameToAppNameMap == null ? appPackage : packageNameToAppNameMap.getOrDefault(appPackage, "");
             apps[i++] = appName;
         }
         Arrays.sort(apps);

@@ -39,7 +39,7 @@ public class UserIdCollector extends AppCompatActivity {
 
                 System.out.println(userId);
 
-                Intent mainIntent = new Intent(UserIdCollector.this, AnotherActivity.class);
+                Intent mainIntent = new Intent(UserIdCollector.this, AppSelection.class);
                 mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
                 UserIdCollector.this.startActivity(mainIntent);
                 UserIdCollector.this.finish();
