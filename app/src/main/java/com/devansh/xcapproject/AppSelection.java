@@ -1,6 +1,7 @@
 package com.devansh.xcapproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static com.devansh.xcapproject.MainActivity.APP_DATA;
 
 public class AppSelection extends AppCompatActivity {
 
@@ -106,6 +109,11 @@ public class AppSelection extends AppCompatActivity {
                         }
                     }
                     savePreferences(selectedApps);
+
+                    Intent mainIntent = new Intent(AppSelection.this, AnotherActivity.class);
+                    mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
+                    AppSelection.this.startActivity(mainIntent);
+                    AppSelection.this.finish();
                 }
             }
         });
