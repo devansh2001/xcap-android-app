@@ -11,6 +11,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import static com.devansh.xcapproject.MainActivity.APP_DATA;
+
 public class UserIdCollector extends AppCompatActivity {
 
     @Override
@@ -37,7 +39,8 @@ public class UserIdCollector extends AppCompatActivity {
 
                 System.out.println(userId);
 
-                Intent mainIntent = new Intent(UserIdCollector.this, MainActivity.class);
+                Intent mainIntent = new Intent(UserIdCollector.this, AnotherActivity.class);
+                mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
                 UserIdCollector.this.startActivity(mainIntent);
                 UserIdCollector.this.finish();
             }

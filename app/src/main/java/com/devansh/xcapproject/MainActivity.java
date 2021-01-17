@@ -46,7 +46,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    PackageManager packageManager;
+    public static PackageManager packageManager;
     private static final String TAG = "MyActivity";
     public static final String APP_DATA = "com.devansh.myfirstapp.MESSAGE";
     public static final String APP_NAME_MAP = "xcap.app.name.map"; // NOT USED
@@ -475,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(MainActivity.this, AppSelection.class);
+                Intent mainIntent = new Intent(MainActivity.this, UserIdCollector.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());
                 mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
 //                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);

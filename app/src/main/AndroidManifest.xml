@@ -11,14 +11,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.devansh.xcapproject.AnotherActivity"/>
-        <activity android:name="com.devansh.xcapproject.MainActivity"/>
-        <activity android:name="com.devansh.xcapproject.AppSelection"/>
-        <activity android:name="com.devansh.xcapproject.UserIdCollector">
+        <activity android:name="com.devansh.xcapproject.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name="com.devansh.xcapproject.AppSelection"/>
+        <activity android:name="com.devansh.xcapproject.UserIdCollector">
+
         </activity>
         <receiver android:name="com.devansh.xcapproject.NotificationReceiver" />
 <!--        CREDITS : https://www.youtube.com/watch?v=1lT0ZliubU0 -->
