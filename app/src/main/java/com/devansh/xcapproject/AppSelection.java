@@ -63,10 +63,6 @@ public class AppSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_selection);
-//        MainActivity.getPermissionsOfAllApps();
-//        AppDetailsUtility utility = new AppDetailsUtility();
-//        utility.onCreate(new Bundle());
-//        Set<String> allApps = utility.getPermissionsOfAllApps().keySet();
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                         getIntent().getSerializableExtra(MainActivity.APP_DATA);
