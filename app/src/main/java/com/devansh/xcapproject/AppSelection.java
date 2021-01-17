@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -27,31 +28,18 @@ public class AppSelection extends AppCompatActivity {
 
     public final String preferencesStringKey = "XCAP_APP_PREFERENCES";
 
-    public void savePreferences(Map<String, Boolean> appPermissions) {
+    public void savePreferences(Set<String> allowedApps) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferencesStringKey, appPermissions.toString());
+        editor.putStringSet(preferencesStringKey, allowedApps);
         editor.apply();
+        editor.commit();
     }
 
-    public void loadPreferences() {
+    public Set<String> loadPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        if (sharedPreferences.contains(preferencesStringKey)) {
-//            Map<String, Boolean> map = (Map<String, Boolean>) sharedPreferences.getString(preferencesStringKey, "");
-//        }
-        String savedPreferences = "";
-
-        savedPreferences = savedPreferences.substring(1, savedPreferences.length() - 1);
-        String[] split = savedPreferences.split(" ");
-        Map<String, Boolean> map = new HashMap<>();
-        for (String currentAppPermission : split) {
-            String[] splitCurrentApp = currentAppPermission.split("=");
-            String app = splitCurrentApp[0];
-            Boolean permission = new Boolean(splitCurrentApp[1]);
-            map.put(app, permission);
-
-        }
-
+        Set<String> savedAllowedApps = (Set<String>) sharedPreferences.getStringSet(preferencesStringKey, new HashSet<String>());
+        return savedAllowedApps;
     }
 
     public void makeText(String str) {
@@ -69,6 +57,7 @@ public class AppSelection extends AppCompatActivity {
         System.out.println("App Selection");
         HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
         System.out.println(message);
+        loadPreferences();
 //        Map<String, Boolean> applicationPermissions = new HashMap<>();
 //
 //        applicationPermissions.put("Facebook", true);
@@ -89,7 +78,7 @@ public class AppSelection extends AppCompatActivity {
 //        System.out.println(applicationPermissions.toString());
 
 
-        String[] apps = new String[message.size()];
+        final String[] apps = new String[message.size()];
         int i = 0;
         for (String appPackage : message.keySet()) {
             String appName = packageNameToAppNameMap == null ? appPackage : packageNameToAppNameMap.getOrDefault(appPackage, "");
@@ -107,10 +96,16 @@ public class AppSelection extends AppCompatActivity {
             public void onClick(View e) {
                 SparseBooleanArray arr = layout.getCheckedItemPositions();
                 if (arr.size() == 0) {
-                    makeText("Please select atleast one application from the above list");
+                    makeText("Please select at least one application from the above list");
                 } else {
                     System.out.println("PREFERENCES");
-                    System.out.println(arr.toString());
+                    Set<String> selectedApps = new HashSet<>();
+                    for (int i = 0; i < apps.length; i++) {
+                        if (arr.get(i, false)) {
+                            selectedApps.add(apps[i]);
+                        }
+                    }
+                    savePreferences(selectedApps);
                 }
             }
         });
