@@ -20,14 +20,35 @@ public class UserIdCollector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_id);
 
-        Button button = (Button) findViewById(R.id.userIdButton);
+        Button startStudyButton = (Button) findViewById(R.id.userIdButton);
         final EditText editText = (EditText) findViewById(R.id.editText);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.contains("XCAP_UNIQUE_ID")) {
             String id = sharedPreferences.getString("XCAP_UNIQUE_ID", "");
             editText.setText(id);
         }
-        button.setOnClickListener(new View.OnClickListener() {
+        startStudyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String userId = editText.getText().toString();
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("XCAP_UNIQUE_ID", userId);
+                editor.apply();
+
+                System.out.println(userId);
+
+                Intent mainIntent = new Intent(UserIdCollector.this, AnotherActivity.class);
+                mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
+                UserIdCollector.this.startActivity(mainIntent);
+                UserIdCollector.this.finish();
+            }
+        });
+
+
+        Button changeAppPreferencesButton = (Button) findViewById(R.id.changePreferencesButton);
+        changeAppPreferencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
