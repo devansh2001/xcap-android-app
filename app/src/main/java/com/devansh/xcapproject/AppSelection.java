@@ -54,11 +54,12 @@ public class AppSelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_selection);
-        HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
+        final HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                         getIntent().getSerializableExtra(MainActivity.APP_DATA);
         System.out.println("App Selection");
         HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
+        final HashMap<String, String> appNameToPackageNameMap = MainActivity.appNameToPackageNameMap;
         System.out.println(message);
         loadPreferences();
 //        Map<String, Boolean> applicationPermissions = new HashMap<>();
@@ -106,12 +107,17 @@ public class AppSelection extends AppCompatActivity {
                     for (int i = 0; i < apps.length; i++) {
                         if (arr.get(i, false)) {
                             selectedApps.add(apps[i]);
+                        } else {
+                            String packageName = appNameToPackageNameMap.get(apps[i]);
+                            message.remove(packageName);
                         }
                     }
                     savePreferences(selectedApps);
 
                     Intent mainIntent = new Intent(AppSelection.this, AnotherActivity.class);
-                    mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
+                    System.out.println("Sending into WebPage");
+                    System.out.println(message);
+                    mainIntent.putExtra(APP_DATA, message);
                     AppSelection.this.startActivity(mainIntent);
                     AppSelection.this.finish();
                 }

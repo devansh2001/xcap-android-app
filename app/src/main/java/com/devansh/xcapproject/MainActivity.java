@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private final int EARLIEST_NOTIFICATION_HOUR = 10;
     private final int LATEST_NOTIFICATION_HOUR = 20;
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
-    public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
+    public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();
+    public static final HashMap<String, String> appNameToPackageNameMap = new HashMap<>();
 
 //    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
             packageNameToAppNameMap.put(packageName, appName);
+            appNameToPackageNameMap.put(appName, packageName);
         }
 
         System.out.println("Final Map");
