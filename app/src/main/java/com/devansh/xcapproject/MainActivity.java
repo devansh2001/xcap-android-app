@@ -46,7 +46,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    PackageManager packageManager;
+    public static PackageManager packageManager;
     private static final String TAG = "MyActivity";
     public static final String APP_DATA = "com.devansh.myfirstapp.MESSAGE";
     public static final String APP_NAME_MAP = "xcap.app.name.map"; // NOT USED
@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private final int EARLIEST_NOTIFICATION_HOUR = 10;
     private final int LATEST_NOTIFICATION_HOUR = 20;
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
-    public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();;
+    public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();
+    public static final HashMap<String, String> appNameToPackageNameMap = new HashMap<>();
 
 //    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
             packageNameToAppNameMap.put(packageName, appName);
+            appNameToPackageNameMap.put(appName, packageName);
         }
 
         System.out.println("Final Map");
@@ -475,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(MainActivity.this, AnotherActivity.class);
+                Intent mainIntent = new Intent(MainActivity.this, UserIdCollector.class);
                 System.out.println(MainActivity.this.getPermissionsOfAllApps());
                 mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
 //                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);
