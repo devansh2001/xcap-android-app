@@ -29,7 +29,7 @@ import static com.devansh.xcapproject.MainActivity.APP_DATA;
 
 public class AppSelection extends AppCompatActivity {
 
-    public final String preferencesStringKey = "XCAP_APP_PREFERENCES";
+    public static final String preferencesStringKey = "XCAP_APP_PREFERENCES";
 
     public void savePreferences(Set<String> allowedApps) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -62,25 +62,6 @@ public class AppSelection extends AppCompatActivity {
         final HashMap<String, String> appNameToPackageNameMap = MainActivity.appNameToPackageNameMap;
         System.out.println(message);
         loadPreferences();
-//        Map<String, Boolean> applicationPermissions = new HashMap<>();
-//
-//        applicationPermissions.put("Facebook", true);
-//        applicationPermissions.put("Google", true);
-//        applicationPermissions.put("WhatsApp", false);
-//        applicationPermissions.put("Chrome", true);
-//        applicationPermissions.put("SnapChat", true);
-//        applicationPermissions.put("Chrome1", true);
-//        applicationPermissions.put("SnapChat1", true);
-//        applicationPermissions.put("Chrome2", true);
-//        applicationPermissions.put("SnapChat2", true);
-//        applicationPermissions.put("Chrome3", true);
-//        applicationPermissions.put("SnapChat3", true);
-//        applicationPermissions.put("SnapChat4", true);
-//        applicationPermissions.put("Chrome4", true);
-//        applicationPermissions.put("SnapChat5", true);
-//
-//        System.out.println(applicationPermissions.toString());
-
 
         final String[] apps = new String[message.size()];
         int i = 0;
