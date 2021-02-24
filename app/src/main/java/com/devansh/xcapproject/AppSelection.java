@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,19 +62,31 @@ public class AppSelection extends AppCompatActivity {
         HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
         final HashMap<String, String> appNameToPackageNameMap = MainActivity.appNameToPackageNameMap;
         System.out.println(message);
-        loadPreferences();
+        Set<String> savedApps = loadPreferences();
 
         final String[] apps = new String[message.size()];
         int i = 0;
+        List<Integer> arrayPositions = new ArrayList<>();
         for (String appPackage : message.keySet()) {
             String appName = packageNameToAppNameMap == null ? appPackage : packageNameToAppNameMap.getOrDefault(appPackage, "");
             apps[i++] = appName;
         }
         Arrays.sort(apps);
+        i = 0;
+        for (String app : apps) {
+            if (savedApps.contains(app)) {
+                arrayPositions.add(i);
+            }
+            i++;
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, apps);
         final ListView layout = (ListView) findViewById(R.id.listView);
-        layout.setAdapter(adapter);
         layout.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        layout.setAdapter(adapter);
+        for (int pos : arrayPositions) {
+            layout.setItemChecked(pos, true);
+        }
+
 
         Button preferencesButton = (Button) findViewById(R.id.preferencesButton);
         preferencesButton.setOnClickListener(new View.OnClickListener() {
