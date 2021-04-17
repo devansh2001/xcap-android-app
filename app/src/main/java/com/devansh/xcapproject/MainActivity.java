@@ -61,9 +61,17 @@ public class MainActivity extends AppCompatActivity {
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
 
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
+//    https://stackoverflow.com/a/8792414
     boolean isValidApp(ApplicationInfo applicationInfo) {
-        int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+//        int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+//        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+        if (applicationInfo.packageName.equals("com.devansh.xcapproject")) {
+            return false;
+        }
+        if (applicationInfo.sourceDir.startsWith("/data/app")) {
+            return true;
+        }
+        return false;
     }
 
     private ArrayList<String> getApplications() {
