@@ -61,9 +61,25 @@ public class MainActivity extends AppCompatActivity {
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
 
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
+    // Try this: https://stackoverflow.com/a/35036644
     boolean isValidApp(ApplicationInfo applicationInfo) {
         int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+        return (applicationInfo.flags & mask) == 0;// && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+    }
+
+    // might work - experimental
+    boolean isValidApp2(ApplicationInfo applicationInfo) {
+        try {
+
+            PackageInfo pi_app = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_SIGNATURES);
+            PackageInfo pi_sys = packageManager.getPackageInfo("android", PackageManager.GET_SIGNATURES);
+            return pi_app == null
+                    || pi_app.signatures == null
+                    || !pi_sys.signatures[0].equals(pi_app.signatures[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private ArrayList<String> getApplications() {
@@ -71,13 +87,18 @@ public class MainActivity extends AppCompatActivity {
 
         List<ApplicationInfo> applications = packageManager.getInstalledApplications(
                 PackageManager.GET_META_DATA);
+        System.out.println("Checking apps");
 
         for (ApplicationInfo applicationInfo : applications) {
+            String appName = applicationInfo.loadLabel(packageManager).toString();
+
             if (!isValidApp(applicationInfo)) {
                 continue;
             }
+            System.out.println(appName);
+            System.out.println("Above is not system app ****");
             String packageName = applicationInfo.packageName;
-            String appName = applicationInfo.loadLabel(packageManager).toString();
+            //String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
             packageNameToAppNameMap.put(packageName, appName);
             appNameToPackageNameMap.put(appName, packageName);
