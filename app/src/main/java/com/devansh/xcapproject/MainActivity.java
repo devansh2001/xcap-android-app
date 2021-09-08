@@ -29,9 +29,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import okhttp3.Call;
@@ -56,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();
     public static final HashMap<String, String> appNameToPackageNameMap = new HashMap<>();
+    public static final Set<String> whiteList = new HashSet<>(Arrays.asList(
+            "facebook",
+            "google",
+            "gmail"
+    ));
 
 //    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
@@ -63,8 +71,11 @@ public class MainActivity extends AppCompatActivity {
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
     // Try this: https://stackoverflow.com/a/35036644
     boolean isValidApp(ApplicationInfo applicationInfo) {
+        if (whiteList.contains(applicationInfo.packageName)) {
+            return true;
+        }
         int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (applicationInfo.flags & mask) == 0;// && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
     }
 
     // might work - experimental
