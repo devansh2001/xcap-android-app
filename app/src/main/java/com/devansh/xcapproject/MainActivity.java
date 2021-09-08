@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();
     public static final HashMap<String, String> appNameToPackageNameMap = new HashMap<>();
+    // Whitelist added from: https://www.t-mobile.com/support/devices/android/samsung-galaxy-s8/pre-installed-apps-samsung-galaxy-s8
     public static final Set<String> whiteList = new HashSet<>(Arrays.asList(
             "amazon",
             "android pay",
