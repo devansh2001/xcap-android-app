@@ -29,9 +29,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import okhttp3.Call;
@@ -56,6 +59,53 @@ public class MainActivity extends AppCompatActivity {
     private final int MIDDLE_NOTIFICATION_HOUR = 15;
     public static final HashMap<String, String> packageNameToAppNameMap = new HashMap<>();
     public static final HashMap<String, String> appNameToPackageNameMap = new HashMap<>();
+    // Whitelist added from: https://www.t-mobile.com/support/devices/android/samsung-galaxy-s8/pre-installed-apps-samsung-galaxy-s8
+    public static final Set<String> whiteList = new HashSet<>(Arrays.asList(
+            "amazon",
+            "android pay",
+            "calculator",
+            "calendar",
+            "clock",
+            "contacts",
+            "drive",
+            "email",
+            "facebook",
+            "galaxy apps",
+            "gallery",
+            "gmail",
+            "google chrome",
+            "google maps",
+            "google play books",
+            "google play magazines",
+            "google play movies & tv",
+            "google play music",
+            "google search",
+            "google+",
+            "hangouts",
+            "instagram",
+            "internet",//
+            "lookout",//
+            "messages",
+            "my files",//
+            "PEN.UP",//
+            "phone",
+            "photos",
+            "s health",
+            "s voice",
+            "samsung connect",//
+            "samsung gear",//
+            "samsung milk music",//
+            "samsung notes",//
+            "samsung pay",//
+            "samsung+",//
+            "sidesync",//
+            "secure folder",//
+            "smart manager",//
+            "smart remote",//
+            "smart switch",//
+            "whatsapp",
+            "youtube"
+    ));
 
 //    final String NOTIFICATION_SERVICE_URL = "https://xcap-notification-service.herokuapp.com";
     final String NOTIFICATION_SERVICE_URL = "https://xcapteam-notification-service.herokuapp.com/";
@@ -63,8 +113,14 @@ public class MainActivity extends AppCompatActivity {
     // Credits: https://stackoverflow.com/questions/8784505/how-do-i-check-if-an-app-is-a-non-system-app-in-android
     // Try this: https://stackoverflow.com/a/35036644
     boolean isValidApp(ApplicationInfo applicationInfo) {
+        if (applicationInfo == null || applicationInfo.name == null || applicationInfo.name.length() == 0) {
+            return false;
+        }
+        if (whiteList.contains(applicationInfo.loadLabel(packageManager).toString().toLowerCase())) {
+            return true;
+        }
         int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (applicationInfo.flags & mask) == 0;// && !applicationInfo.packageName.equals("com.devansh.xcapproject");
+        return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
     }
 
     // might work - experimental
