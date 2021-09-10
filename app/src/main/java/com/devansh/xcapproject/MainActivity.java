@@ -123,21 +123,6 @@ public class MainActivity extends AppCompatActivity {
         return (applicationInfo.flags & mask) == 0 && !applicationInfo.packageName.equals("com.devansh.xcapproject");
     }
 
-    // might work - experimental
-    boolean isValidApp2(ApplicationInfo applicationInfo) {
-        try {
-
-            PackageInfo pi_app = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_SIGNATURES);
-            PackageInfo pi_sys = packageManager.getPackageInfo("android", PackageManager.GET_SIGNATURES);
-            return pi_app == null
-                    || pi_app.signatures == null
-                    || !pi_sys.signatures[0].equals(pi_app.signatures[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     private ArrayList<String> getApplications() {
         ArrayList<String> result = new ArrayList<>();
 
