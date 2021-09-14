@@ -118,5 +118,14 @@ public class AppSelection extends AppCompatActivity {
             }
         });
 
+        Button bugReport = (Button) findViewById(R.id.bugReportAppSelector);
+        bugReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent bugReportIntent = BugReportUtility.getEmailIntent("0");
+                startActivity(bugReportIntent);
+            }
+        });
+
     }
 }
