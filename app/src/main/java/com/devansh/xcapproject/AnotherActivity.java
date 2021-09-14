@@ -134,7 +134,7 @@ public class AnotherActivity extends AppCompatActivity {
                 //do whatever you want with url
                 System.out.println(url);
                 if (url != null && url.contains("mailto")) {
-                    Intent bugReportEmailIntent = BugReportUtility.getEmailIntent("0");
+                    Intent bugReportEmailIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
                     startActivity(bugReportEmailIntent);
                 } else {
                     view.loadUrl(url);

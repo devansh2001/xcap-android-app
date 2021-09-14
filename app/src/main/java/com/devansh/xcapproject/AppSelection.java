@@ -122,7 +122,7 @@ public class AppSelection extends AppCompatActivity {
         bugReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent bugReportIntent = BugReportUtility.getEmailIntent("0");
+                Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
                 startActivity(bugReportIntent);
             }
         });
