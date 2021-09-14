@@ -94,8 +94,8 @@ public class UserIdCollector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String userId = editText.getText().toString();
-                Intent intent = BugReportUtility.getEmailIntent(userId);
-                startActivity(intent);
+                Intent bugReportEmailIntent = BugReportUtility.getEmailIntent(userId);
+                startActivity(bugReportEmailIntent);
             }
         });
 

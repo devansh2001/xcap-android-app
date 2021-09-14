@@ -133,8 +133,12 @@ public class AnotherActivity extends AppCompatActivity {
             {
                 //do whatever you want with url
                 System.out.println(url);
-                System.out.println("THIS IS MY URL HAHA");
-                view.loadUrl(url);
+                if (url != null && url.contains("mailto")) {
+                    Intent bugReportEmailIntent = BugReportUtility.getEmailIntent("0");
+                    startActivity(bugReportEmailIntent);
+                } else {
+                    view.loadUrl(url);
+                }
                 return true;
             }
 
