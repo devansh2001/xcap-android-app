@@ -54,6 +54,7 @@ public class UserIdCollector extends AppCompatActivity {
         setContentView(R.layout.activity_user_id);
 
         Button startStudyButton = (Button) findViewById(R.id.userIdButton);
+        Button bugReportButton = (Button) findViewById(R.id.bugReport);
         final EditText editText = (EditText) findViewById(R.id.editText);
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPreferences.contains("XCAP_UNIQUE_ID")) {
@@ -89,6 +90,14 @@ public class UserIdCollector extends AppCompatActivity {
             }
         });
 
+        bugReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userId = editText.getText().toString();
+                Intent intent = BugReportUtility.getEmailIntent(userId);
+                startActivity(intent);
+            }
+        });
 
         Button changeAppPreferencesButton = (Button) findViewById(R.id.changePreferencesButton);
         changeAppPreferencesButton.setOnClickListener(new View.OnClickListener() {
