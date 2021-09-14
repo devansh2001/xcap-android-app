@@ -123,7 +123,16 @@ public class AppSelection extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
-                startActivity(bugReportIntent);
+                try {
+                    Toast.makeText(AppSelection.this,
+                            "Opening default email app...",
+                            Toast.LENGTH_LONG).show();
+                    startActivity(bugReportIntent);
+                } catch (Exception e) {
+                    Toast.makeText(AppSelection.this,
+                            "Default email app not found!\nPlease email dponda3@gatech.edu with subject: [XCAP BUG] (your participant ID)",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
 

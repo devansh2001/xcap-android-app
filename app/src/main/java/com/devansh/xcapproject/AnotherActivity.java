@@ -134,8 +134,17 @@ public class AnotherActivity extends AppCompatActivity {
                 //do whatever you want with url
                 System.out.println(url);
                 if (url != null && url.contains("mailto")) {
-                    Intent bugReportEmailIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
-                    startActivity(bugReportEmailIntent);
+                    Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
+                    try {
+                        Toast.makeText(AnotherActivity.this,
+                                "Opening default email app...",
+                                Toast.LENGTH_LONG).show();
+                        startActivity(bugReportIntent);
+                    } catch (Exception e) {
+                        Toast.makeText(AnotherActivity.this,
+                                "Default email app not found!\nPlease email dponda3@gatech.edu with subject: [XCAP BUG] (your participant ID)",
+                                Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     view.loadUrl(url);
                 }

@@ -95,8 +95,17 @@ public class UserIdCollector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String userId = editText.getText().toString();
-                Intent bugReportEmailIntent = BugReportUtility.getEmailIntent(userId);
-                startActivity(bugReportEmailIntent);
+                Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
+                try {
+                    Toast.makeText(UserIdCollector.this,
+                            "Opening default email app...",
+                            Toast.LENGTH_LONG).show();
+                    startActivity(bugReportIntent);
+                } catch (Exception e) {
+                    Toast.makeText(UserIdCollector.this,
+                            "Default email app not found!\nPlease email dponda3@gatech.edu with subject: [XCAP BUG] (your participant ID)",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
 
