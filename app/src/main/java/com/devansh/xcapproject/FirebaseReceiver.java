@@ -40,14 +40,16 @@ public class FirebaseReceiver extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                .setAutoCancel(true)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .setContentTitle("REMINDER: Fill XCAP Survey")
+                .setContentText("Touch here / open the app to fill the XCAP ResearchSurvey")
+                .setAutoCancel(true);
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 //            builder = builder.setContent(get)
 //        }
-        builder.setContentTitle("This is a Test").setContentText("This is also aaaa test");
+//        builder.setContentTitle("Ignore").setContentText("Ignore this notification");
 
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
