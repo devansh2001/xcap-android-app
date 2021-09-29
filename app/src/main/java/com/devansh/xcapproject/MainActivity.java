@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             "amazon",
             "android pay",
             "calculator",
-            "calendar",
             "clock",
             "contacts",
             "drive",
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
             "messages",
             "my files",//
             "PEN.UP",//
-            "phone",
             "photos",
             "s health",
             "s voice",

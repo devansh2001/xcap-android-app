@@ -33,6 +33,7 @@ public class AppSelection extends AppCompatActivity {
     public static final String preferencesStringKey = "XCAP_APP_PREFERENCES";
 
     public void savePreferences(Set<String> allowedApps) {
+        System.out.println(allowedApps);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putStringSet(preferencesStringKey, allowedApps);
@@ -93,10 +94,14 @@ public class AppSelection extends AppCompatActivity {
             @Override
             public void onClick(View e) {
                 SparseBooleanArray arr = layout.getCheckedItemPositions();
+                System.out.println("Logging apps...");
+                System.out.println(arr);
                 if (arr.size() == 0) {
                     makeText("Please select at least one application from the above list");
                 } else {
 //                    System.out.println("PREFERENCES");
+                    System.out.println("Message before");
+                    System.out.println(message);
                     Set<String> selectedApps = new HashSet<>();
                     for (int i = 0; i < apps.length; i++) {
                         if (arr.get(i, false)) {
@@ -107,13 +112,20 @@ public class AppSelection extends AppCompatActivity {
                         }
                     }
                     savePreferences(selectedApps);
+                    System.out.println("Message after");
+                    System.out.println(message);
 
                     Intent mainIntent = new Intent(AppSelection.this, AnotherActivity.class);
 //                    System.out.println("Sending into WebPage");
 //                    System.out.println(message);
-                    mainIntent.putExtra(APP_DATA, message);
-                    AppSelection.this.startActivity(mainIntent);
-                    AppSelection.this.finish();
+                    if (message.size() == 0) {
+                        makeText("Please select at least one application from the above list");
+                    } else {
+                        mainIntent.putExtra(APP_DATA, message);
+                        AppSelection.this.startActivity(mainIntent);
+                        AppSelection.this.finish();
+                    }
+
                 }
             }
         });
