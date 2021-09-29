@@ -40,7 +40,7 @@ public class AnotherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_another);
-        System.out.println("THIS IS SCREEN 2");
+
         Intent intent = getIntent();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
@@ -57,59 +57,39 @@ public class AnotherActivity extends AppCompatActivity {
             try {
                 String appName = packageNameToAppNameMap == null ? app : packageNameToAppNameMap.getOrDefault(app, "");
                 json.put(appName, compiledList);
-                System.out.println(app);
-                System.out.println(compiledList);
-                System.out.println("*****");
             } catch (JSONException e) {
+                Toast.makeText(this, "Error getting app name", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
 
         try {
-            Log.d(TAG, json.toString(4));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
             if (sharedPreferences.contains("XCAP_UNIQUE_ID")) {
-                Log.d(TAG, "Found String");
-                Log.d(TAG, sharedPreferences.getString("XCAP_UNIQUE_ID", ""));
+//                Log.d(TAG, "Found String");
+//                Log.d(TAG, sharedPreferences.getString("XCAP_UNIQUE_ID", ""));
                 json.put("PARTICIPANT_ID", sharedPreferences.getString("XCAP_UNIQUE_ID", ""));
             } else {
-                Log.d(TAG, "Absent String");
+//                Log.d(TAG, "Absent String");
                 String uuid = UUID.randomUUID().toString();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("XCAP_UNIQUE_ID", uuid);
                 editor.apply();
                 json.put("PARTICIPANT_ID", uuid);
-                Log.d(TAG, "Added String : " + uuid);
+//                Log.d(TAG, "Added String : " + uuid);
             }
         } catch (JSONException e) {
+            Toast.makeText(this, "Error getting XCAP_UNIQUE_ID", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-
-//        try {
-//            Log.d(TAG, new JSONObject(message).toString(4));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-//        LinearLayout layout = (LinearLayout) findViewById(R.id.linearLayout);
-//        for (int i = 0; i < 10; i++) {
-//            CheckBox btn = new CheckBox(this);
-//            btn.setText("Work!");
-//            layout.addView(btn);
-//        }
 
         WebView view = (WebView) findViewById(R.id.webView);
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar2);
         view.setVisibility(View.GONE);
         view.setWebChromeClient(new WebChromeClient() {
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                Log.d("MyApplication", cm.message() + " -- From line "
-                        + cm.lineNumber() + " of "
-                        + cm.sourceId() );
+//                Log.d("MyApplication", cm.message() + " -- From line "
+//                        + cm.lineNumber() + " of "
+//                        + cm.sourceId() );
                 return true;
             }
 
@@ -117,7 +97,7 @@ public class AnotherActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, int newProgress) {
                 progressBar.setProgress(newProgress);
 
-                Log.d("MyApplication", newProgress + " is progress");
+//                Log.d("MyApplication", newProgress + " is progress");
 
                 super.onProgressChanged(view, newProgress);
 
@@ -131,8 +111,7 @@ public class AnotherActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url)
             {
-                //do whatever you want with url
-                System.out.println(url);
+                // System.out.println(url);
                 if (url != null && url.contains("mailto")) {
                     Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
                     try {
@@ -155,8 +134,8 @@ public class AnotherActivity extends AppCompatActivity {
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 //              super.onReceivedSslError(view, handler, error);
 
-                Log.e(TAG, "onReceivedSslError...");
-                Log.e(TAG, "Error: " + error);
+//                Log.e(TAG, "onReceivedSslError...");
+//                Log.e(TAG, "Error: " + error);
                 handler.proceed();
             }
         });
@@ -171,8 +150,8 @@ public class AnotherActivity extends AppCompatActivity {
         view.getSettings().setMinimumLogicalFontSize(1);
         view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-        Log.d(TAG, "Passing JSON");
-        Log.d(TAG, json.toString());
+//        Log.d(TAG, "Passing JSON");
+//        Log.d(TAG, json.toString());
         view.addJavascriptInterface(new WebAppInterface(this, json), "Android");
         view.loadUrl(this.URL);
 
@@ -189,8 +168,8 @@ class WebAppInterface {
     WebAppInterface(Context c, JSONObject json) {
         mContext = c;
         this.json = json;
-        Log.d(TAG, "GOT CONSTRUCTOR DATA");
-        Log.d(TAG, json.toString());
+//        Log.d(TAG, "GOT CONSTRUCTOR DATA");
+//        Log.d(TAG, json.toString());
     }
 
     /** Show a toast from the web page */

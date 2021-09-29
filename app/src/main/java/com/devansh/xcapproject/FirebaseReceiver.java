@@ -29,11 +29,11 @@ public class FirebaseReceiver extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.d("NewToken", s);
+        // Log.d("NewToken", s);
     }
 
     public void showNotification() {
-        System.out.println("GOT A NOTIFICATION");
+//        System.out.println("GOT A NOTIFICATION");
         Intent intent = new Intent(this, UserIdCollector.class);
         String channelId = "XCAP_CHANNEL";
 
