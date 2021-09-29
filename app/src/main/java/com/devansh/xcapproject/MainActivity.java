@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         List<ApplicationInfo> applications = packageManager.getInstalledApplications(
                 PackageManager.GET_META_DATA);
-        System.out.println("Checking apps");
+//        System.out.println("Checking apps");
 
         for (ApplicationInfo applicationInfo : applications) {
             String appName = applicationInfo.loadLabel(packageManager).toString();
@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
             if (!isValidApp(applicationInfo)) {
                 continue;
             }
-            System.out.println(appName);
-            System.out.println("Above is not system app ****");
+//            System.out.println(appName);
+//            System.out.println("Above is not system app ****");
             String packageName = applicationInfo.packageName;
             //String appName = applicationInfo.loadLabel(packageManager).toString();
             result.add(applicationInfo.packageName);
@@ -145,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
             appNameToPackageNameMap.put(appName, packageName);
         }
 
-        System.out.println("Final Map");
-        System.out.println(packageNameToAppNameMap);
+//        System.out.println("Final Map");
+//        System.out.println(packageNameToAppNameMap);
 
         return result;
     }
@@ -185,11 +185,11 @@ public class MainActivity extends AppCompatActivity {
                 throw new Exception("Cannot find package info for " + applicationPackageName);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Log.d(TAG, "Error while getting permissions for: " + applicationPackageName);
+//            Log.d(TAG, "Error while getting permissions for: " + applicationPackageName);
             e.printStackTrace();
             return result;
         } catch (Exception e) {
-            Log.d(TAG, e.getMessage() == null ? "" : e.getMessage());
+//            Log.d(TAG, e.getMessage() == null ? "" : e.getMessage());
             e.printStackTrace();
             return result;
         }
@@ -262,10 +262,10 @@ public class MainActivity extends AppCompatActivity {
 //        packageNameToAppNameMap = new HashMap<>();
         ArrayList<String> apps = getApplications();
         for (String app : apps) {
-            Log.d(TAG, app);
+//            Log.d(TAG, app);
             HashMap<Integer, ArrayList<AndroidPermissions>>  map = getPermissions(app);
             result.put(app, map);
-            Log.d(TAG, map.toString());
+//            Log.d(TAG, map.toString());
         }
 
         removeAppsWithNoPermissions(result);
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         String dateString = String.format("%d-%d-%d", year, month, day);
 
-        System.out.println(dateString);
+//        System.out.println(dateString);
 
         return dateString;
     }
@@ -300,9 +300,9 @@ public class MainActivity extends AppCompatActivity {
     public String getNotificationTimeInUTC(Calendar calendar) {
         Calendar deepCopy = (Calendar) calendar.clone();
         deepCopy.setTimeZone(TimeZone.getTimeZone("UTC"));
-        System.out.println("Updated Notification Time");
-        System.out.println(getDateTimeString(deepCopy));
-        System.out.println(getDateTimeString(calendar));
+//        System.out.println("Updated Notification Time");
+//        System.out.println(getDateTimeString(deepCopy));
+//        System.out.println(getDateTimeString(calendar));
         return getDateTimeString(deepCopy);
     }
 
@@ -317,9 +317,9 @@ public class MainActivity extends AppCompatActivity {
             currentString = sharedPreferences.getString(keyString, "");
         }
 
-        System.out.println("GET AND SET RUN SUMMARY");
-        System.out.println(dateString + " was datestring");
-        System.out.println(dateString + " was currentString");
+//        System.out.println("GET AND SET RUN SUMMARY");
+//        System.out.println(dateString + " was datestring");
+//        System.out.println(dateString + " was currentString");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(keyString, dateString);
@@ -343,28 +343,28 @@ public class MainActivity extends AppCompatActivity {
         final String isFirstKey = "XCAP_IS_FIRST_IN_DAY";
         boolean isFirst = false;
         if (sharedPreferences.contains(isFirstKey)) {
-            Log.d(TAG, "Found String");
+//            Log.d(TAG, "Found String");
             isFirst = sharedPreferences.getBoolean(isFirstKey, false);
-            Log.d(TAG, sharedPreferences.getBoolean(isFirstKey, false) + "");
+//            Log.d(TAG, sharedPreferences.getBoolean(isFirstKey, false) + "");
 //            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            editor.remove(isFirstKey);
 //            editor.apply();
         } else {
-            Log.d(TAG, "Absent String");
+//            Log.d(TAG, "Absent String");
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(isFirstKey, true);
             editor.apply();
             isFirst = true;
-            Log.d(TAG, "Added Boolean : " + true);
+//            Log.d(TAG, "Added Boolean : " + true);
         }
 //
         Calendar calendar = Calendar.getInstance();
-        System.out.println(Calendar.YEAR);
-        System.out.println(calendar.getTimeInMillis() + " " + calendar.toString());
+//        System.out.println(Calendar.YEAR);
+//        System.out.println(calendar.getTimeInMillis() + " " + calendar.toString());
 
 
         boolean isSameDay = getAndSet(calendar);
-        System.out.println(isSameDay + " isSameDay");
+//        System.out.println(isSameDay + " isSameDay");
 
         if (isSameDay) {
             // Means that we need to set an alarm for tomorrow
@@ -374,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
             int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound));
             int minute = (int) (Math.random() * 60);
 
-            System.out.println(hour + " " + minute);
+//            System.out.println(hour + " " + minute);
 
             calendar.add(Calendar.DATE, 1);
             calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -389,12 +389,11 @@ public class MainActivity extends AppCompatActivity {
             int hour = (int) Math.floor(lowerBound + Math.random() * (upperBound - lowerBound));
             int minute = (int) (Math.random() * 60);
 
-            System.out.println(hour + " " + minute);
+//            System.out.println(hour + " " + minute);
 
             calendar.set(Calendar.HOUR_OF_DAY, hour);
             calendar.set(Calendar.MINUTE, minute);
             calendar.set(Calendar.SECOND, 0);
-
         }
 
 
@@ -454,9 +453,9 @@ public class MainActivity extends AppCompatActivity {
 //
 ////        long time = System.currentTimeMillis();
 ////        long ten = 10 * 1000;
-        Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
-        Log.d(TAG, "Set alarm " + calendar.getTime().toString());
-        Toast.makeText(this, calendar.getTime().toString(), Toast.LENGTH_LONG).show();
+//        Log.d(TAG, "Setting alarm for " + calendar.getTimeInMillis() + " - " + calendar.toString());
+//        Log.d(TAG, "Set alarm " + calendar.getTime().toString());
+//        Toast.makeText(this, calendar.getTime().toString(), Toast.LENGTH_LONG).show();
 //        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 //        System.out.println(alarmManager.getNextAlarmClock().getTriggerTime());
 //
@@ -486,8 +485,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         final String dateString = getNotificationTimeInUTC(calendar);
-        System.out.println(dateString);
-        System.out.println("Date String");
+//        System.out.println(dateString);
+//        System.out.println("Date String");
 
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -497,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
                 // https://trinitytuts.com/get-and-post-request-using-okhttp-in-android-application/
                 try {
 
-                    System.out.println("Making call");
+//                    System.out.println("Making call");
                     OkHttpClient client = new OkHttpClient();
 
                     JSONObject dict = new JSONObject();
@@ -523,7 +522,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             String mMessage = e.getMessage().toString();
-                            Log.w("failure Response", mMessage);
+//                            Log.w("failure Response", mMessage);
                             //call.cancel();
                         }
 
@@ -531,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
 
                             String mMessage = response.body().string();
-                            Log.e("OKTTP", mMessage);
+//                            Log.e("OKTTP", mMessage);
                         }
                     });
 
@@ -540,7 +539,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(MainActivity.this, UserIdCollector.class);
-                System.out.println(MainActivity.this.getPermissionsOfAllApps());
+//                System.out.println(MainActivity.this.getPermissionsOfAllApps());
                 mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
 //                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);
                 MainActivity.this.startActivity(mainIntent);

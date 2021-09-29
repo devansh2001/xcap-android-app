@@ -72,7 +72,7 @@ public class UserIdCollector extends AppCompatActivity {
                 editor.putString("XCAP_UNIQUE_ID", userId);
                 editor.apply();
 
-                System.out.println(userId);
+//                System.out.println(userId);
 
                 Set<String> allowedApps = loadPreferences();
                 if (allowedApps == null || allowedApps.size() == 0) {
@@ -120,7 +120,7 @@ public class UserIdCollector extends AppCompatActivity {
                 editor.putString("XCAP_UNIQUE_ID", userId);
                 editor.apply();
 
-                System.out.println(userId);
+//                System.out.println(userId);
 
                 Intent mainIntent = new Intent(UserIdCollector.this, AppSelection.class);
                 mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));

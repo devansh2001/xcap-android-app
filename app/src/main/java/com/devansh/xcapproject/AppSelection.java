@@ -58,10 +58,10 @@ public class AppSelection extends AppCompatActivity {
         final HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> message =
                 (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                         getIntent().getSerializableExtra(MainActivity.APP_DATA);
-        System.out.println("App Selection");
+//        System.out.println("App Selection");
         HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
         final HashMap<String, String> appNameToPackageNameMap = MainActivity.appNameToPackageNameMap;
-        System.out.println(message);
+//        System.out.println(message);
         Set<String> savedApps = loadPreferences();
 
         final String[] apps = new String[message.size()];
@@ -96,7 +96,7 @@ public class AppSelection extends AppCompatActivity {
                 if (arr.size() == 0) {
                     makeText("Please select at least one application from the above list");
                 } else {
-                    System.out.println("PREFERENCES");
+//                    System.out.println("PREFERENCES");
                     Set<String> selectedApps = new HashSet<>();
                     for (int i = 0; i < apps.length; i++) {
                         if (arr.get(i, false)) {
@@ -109,8 +109,8 @@ public class AppSelection extends AppCompatActivity {
                     savePreferences(selectedApps);
 
                     Intent mainIntent = new Intent(AppSelection.this, AnotherActivity.class);
-                    System.out.println("Sending into WebPage");
-                    System.out.println(message);
+//                    System.out.println("Sending into WebPage");
+//                    System.out.println(message);
                     mainIntent.putExtra(APP_DATA, message);
                     AppSelection.this.startActivity(mainIntent);
                     AppSelection.this.finish();
