@@ -119,6 +119,7 @@ public class AppSelection extends AppCompatActivity {
                         makeText("Please select at least one application from the above list");
                     } else {
                         mainIntent.putExtra(APP_DATA, workingMessage);
+                        mainIntent.putExtra("USER_ID", getIntent().getStringExtra("USER_ID"));
                         AppSelection.this.startActivity(mainIntent);
                         AppSelection.this.finish();
                     }

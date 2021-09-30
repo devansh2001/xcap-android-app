@@ -100,8 +100,11 @@ public class UserIdCollector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String userId = editText.getText().toString();
+                if (userId == null || userId.equals("")) {
+                    userId = null;
+                }
 
-                Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
+                Intent bugReportIntent = BugReportUtility.getEmailIntent(userId);
                 try {
                     Toast.makeText(UserIdCollector.this,
                             "Opening default email app...",
