@@ -68,6 +68,11 @@ public class UserIdCollector extends AppCompatActivity {
 
                 String userId = editText.getText().toString();
 
+                if (userId == null || userId.equals("")) {
+                    makeText("Please input a valid Participant ID to proceed");
+                    return;
+                }
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("XCAP_UNIQUE_ID", userId);
                 editor.apply();
@@ -95,6 +100,7 @@ public class UserIdCollector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String userId = editText.getText().toString();
+
                 Intent bugReportIntent = BugReportUtility.getEmailIntent(getIntent().getStringExtra("USER_ID"));
                 try {
                     Toast.makeText(UserIdCollector.this,
@@ -115,6 +121,10 @@ public class UserIdCollector extends AppCompatActivity {
             public void onClick(View view) {
 
                 String userId = editText.getText().toString();
+                if (userId == null || userId.equals("")) {
+                    makeText("Please input a valid Participant ID to proceed");
+                    return;
+                }
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("XCAP_UNIQUE_ID", userId);
