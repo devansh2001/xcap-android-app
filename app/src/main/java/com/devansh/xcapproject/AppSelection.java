@@ -93,35 +93,32 @@ public class AppSelection extends AppCompatActivity {
         preferencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View e) {
+                HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> workingMessage =
+                        (new HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>(message));
+
                 SparseBooleanArray arr = layout.getCheckedItemPositions();
-                System.out.println("Logging apps...");
-                System.out.println(arr);
                 if (arr.size() == 0) {
                     makeText("Please select at least one application from the above list");
                 } else {
 //                    System.out.println("PREFERENCES");
-                    System.out.println("Message before");
-                    System.out.println(message);
                     Set<String> selectedApps = new HashSet<>();
                     for (int i = 0; i < apps.length; i++) {
                         if (arr.get(i, false)) {
                             selectedApps.add(apps[i]);
                         } else {
                             String packageName = appNameToPackageNameMap.get(apps[i]);
-                            message.remove(packageName);
+                            workingMessage.remove(packageName);
                         }
                     }
                     savePreferences(selectedApps);
-                    System.out.println("Message after");
-                    System.out.println(message);
 
                     Intent mainIntent = new Intent(AppSelection.this, AnotherActivity.class);
 //                    System.out.println("Sending into WebPage");
 //                    System.out.println(message);
-                    if (message.size() == 0) {
+                    if (workingMessage.size() == 0) {
                         makeText("Please select at least one application from the above list");
                     } else {
-                        mainIntent.putExtra(APP_DATA, message);
+                        mainIntent.putExtra(APP_DATA, workingMessage);
                         AppSelection.this.startActivity(mainIntent);
                         AppSelection.this.finish();
                     }
