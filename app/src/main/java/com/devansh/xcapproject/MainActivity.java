@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
@@ -126,8 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
         List<ApplicationInfo> applications = packageManager.getInstalledApplications(
                 PackageManager.GET_META_DATA);
+        FirebaseCrashlytics.getInstance().log("Got apps.." + applications.size());
 //        System.out.println("Checking apps");
 
+        FirebaseCrashlytics.getInstance().log("Filtering valid apps..");
         for (ApplicationInfo applicationInfo : applications) {
             String appName = applicationInfo.loadLabel(packageManager).toString();
 
@@ -151,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            FirebaseCrashlytics.getInstance().log("Valid version..");
             NotificationChannel channel1 = new NotificationChannel(
                     "channel1",
                     "Channel 1",
@@ -166,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
     private String formatPermission(String unformattedPermission) {
         String[] split = unformattedPermission.split("\\.");
         if (split == null || split.length == 0) {
+            FirebaseCrashlytics.getInstance().log("Split empty");
             return "";
         }
         return split[split.length - 1];
@@ -184,10 +189,12 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (PackageManager.NameNotFoundException e) {
 //            Log.d(TAG, "Error while getting permissions for: " + applicationPackageName);
+            FirebaseCrashlytics.getInstance().log("Package not found in package manager.., " + applicationPackageName);
             e.printStackTrace();
             return result;
         } catch (Exception e) {
 //            Log.d(TAG, e.getMessage() == null ? "" : e.getMessage());
+            FirebaseCrashlytics.getInstance().log(e.toString());
             e.printStackTrace();
             return result;
         }
@@ -200,7 +207,10 @@ public class MainActivity extends AppCompatActivity {
 
         for (String unformattedPermission : unformattedPermissions) {
             String formattedPermission = formatPermission(unformattedPermission);
-
+            if (formattedPermission == null || formattedPermission.equals("")) {
+                FirebaseCrashlytics.getInstance().log(unformattedPermission + "is empty");
+                continue;
+            }
             AndroidPermissions permission;
             try {
                 permission = AndroidPermissions.valueOf(formattedPermission);
@@ -216,6 +226,8 @@ public class MainActivity extends AppCompatActivity {
                     result.put(group, list);
                 }
             } catch (IllegalArgumentException e) {
+                FirebaseCrashlytics.getInstance().log("Error in getPermissions");
+                FirebaseCrashlytics.getInstance().log(e.toString());
                 continue;
             }
         }
@@ -266,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
 //            Log.d(TAG, map.toString());
         }
 
+        FirebaseCrashlytics.getInstance().log("Removing apps with no permissions..");
         removeAppsWithNoPermissions(result);
         return result;
 
@@ -291,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
         String dateString = String.format("%d-%d-%d", year, month, day);
 
 //        System.out.println(dateString);
-
+        FirebaseCrashlytics.getInstance().log("Converted date string success..");
         return dateString;
     }
     // https://stackoverflow.com/a/2595654
@@ -301,6 +314,8 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println("Updated Notification Time");
 //        System.out.println(getDateTimeString(deepCopy));
 //        System.out.println(getDateTimeString(calendar));
+        FirebaseCrashlytics.getInstance().log("Converted notification time to UTC..");
+        FirebaseCrashlytics.getInstance().log(deepCopy.toString());
         return getDateTimeString(deepCopy);
     }
 
@@ -314,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
         if (sharedPreferences.contains(keyString)) {
             currentString = sharedPreferences.getString(keyString, "");
         }
+        FirebaseCrashlytics.getInstance().log("Obtained current string.." + currentString);
 
 //        System.out.println("GET AND SET RUN SUMMARY");
 //        System.out.println(dateString + " was datestring");
@@ -323,6 +339,8 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(keyString, dateString);
         editor.apply();
 
+        FirebaseCrashlytics.getInstance().log("Applied updated date..");
+
         return currentString.equals(dateString);
     }
 
@@ -330,14 +348,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseCrashlytics.getInstance().log("Starting..");
         this.packageManager = getPackageManager();
 
-        System.out.println("THIS IS SCREEN 1");
-
+//        System.out.println("THIS IS SCREEN 1");
+        FirebaseCrashlytics.getInstance().log("Got PM");
         createNotificationChannel();
+        FirebaseCrashlytics.getInstance().log("Created notification channel..");
 //
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 //
+        FirebaseCrashlytics.getInstance().log("SharedPref..");
         final String isFirstKey = "XCAP_IS_FIRST_IN_DAY";
         boolean isFirst = false;
         if (sharedPreferences.contains(isFirstKey)) {
@@ -355,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
             isFirst = true;
 //            Log.d(TAG, "Added Boolean : " + true);
         }
+        FirebaseCrashlytics.getInstance().log("Checked isFirst..");
 //
         Calendar calendar = Calendar.getInstance();
 //        System.out.println(Calendar.YEAR);
@@ -448,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
 ////
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        FirebaseCrashlytics.getInstance().log("Created alarm, intent, pending intent..");
 //
 ////        long time = System.currentTimeMillis();
 ////        long ten = 10 * 1000;
@@ -467,6 +490,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
                             Log.w("FCMStuff", "Fetching FCM registration token failed", task.getException());
+                            FirebaseCrashlytics.getInstance().log("Unable to get token from Firebase..");
                             return;
                         }
 
@@ -475,9 +499,10 @@ public class MainActivity extends AppCompatActivity {
 
                         deviceId[0] = token;
 
+                        FirebaseCrashlytics.getInstance().log("Got token from Firebase..");
                         // Log and toast
 //                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("FCMStuff", token);
+//                        Log.d("FCMStuff", token);
 //                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -495,6 +520,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
 //                    System.out.println("Making call");
+                    FirebaseCrashlytics.getInstance().log("Scheduling notification..");
                     OkHttpClient client = new OkHttpClient();
 
                     JSONObject dict = new JSONObject();
@@ -513,6 +539,7 @@ public class MainActivity extends AppCompatActivity {
                             .header("Access-Control-Allow-Origin", "*")
                             .build();
 
+                    FirebaseCrashlytics.getInstance().log("Built request..");
 //                    Response response = client.newCall(request).execute();
 //                    System.out.println(response.body().string());
 
@@ -520,6 +547,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(Call call, IOException e) {
                             String mMessage = e.getMessage().toString();
+                            FirebaseCrashlytics.getInstance().log("Notification scheduling failed..");
 //                            Log.w("failure Response", mMessage);
                             //call.cancel();
                         }
@@ -528,6 +556,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
 
                             String mMessage = response.body().string();
+                            FirebaseCrashlytics.getInstance().log("Notification scheduling success..");
 //                            Log.e("OKTTP", mMessage);
                         }
                     });
@@ -535,10 +564,13 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                FirebaseCrashlytics.getInstance().log("Moving to UserId view");
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(MainActivity.this, UserIdCollector.class);
 //                System.out.println(MainActivity.this.getPermissionsOfAllApps());
                 mainIntent.putExtra(APP_DATA, MainActivity.this.getPermissionsOfAllApps());
+                FirebaseCrashlytics.getInstance().log("Added app data to intent..");
 //                mainIntent.putExtra(APP_NAME_MAP, packageNameToAppNameMap);
                 MainActivity.this.startActivity(mainIntent);
                 MainActivity.this.finish();
