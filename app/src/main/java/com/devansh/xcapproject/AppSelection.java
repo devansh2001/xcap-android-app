@@ -28,6 +28,8 @@ import java.util.Set;
 
 import static com.devansh.xcapproject.MainActivity.APP_DATA;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 public class AppSelection extends AppCompatActivity {
 
     public static final String preferencesStringKey = "XCAP_APP_PREFERENCES";
@@ -39,11 +41,13 @@ public class AppSelection extends AppCompatActivity {
         editor.putStringSet(preferencesStringKey, allowedApps);
         editor.apply();
         editor.commit();
+        FirebaseCrashlytics.getInstance().log("Saved preferences..");
     }
 
     public Set<String> loadPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Set<String> savedAllowedApps = (Set<String>) sharedPreferences.getStringSet(preferencesStringKey, new HashSet<String>());
+        FirebaseCrashlytics.getInstance().log("Loaded preferences..");
         return savedAllowedApps;
     }
 
@@ -72,6 +76,7 @@ public class AppSelection extends AppCompatActivity {
             String appName = packageNameToAppNameMap == null ? appPackage : packageNameToAppNameMap.getOrDefault(appPackage, "");
             apps[i++] = appName;
         }
+        FirebaseCrashlytics.getInstance().log("Preselecting saved preferences..");
         Arrays.sort(apps);
         i = 0;
         for (String app : apps) {
@@ -118,6 +123,7 @@ public class AppSelection extends AppCompatActivity {
                     if (workingMessage.size() == 0) {
                         makeText("Please select at least one application from the above list");
                     } else {
+                        FirebaseCrashlytics.getInstance().log("Moving to start study..");
                         mainIntent.putExtra(APP_DATA, workingMessage);
                         mainIntent.putExtra("USER_ID", getIntent().getStringExtra("USER_ID"));
                         AppSelection.this.startActivity(mainIntent);

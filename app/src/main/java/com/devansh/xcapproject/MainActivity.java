@@ -511,6 +511,9 @@ public class MainActivity extends AppCompatActivity {
 //        System.out.println(dateString);
 //        System.out.println("Date String");
 
+        // for testing crashlytics
+
+
         new Handler().postDelayed(new Runnable(){
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -539,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
                             .header("Access-Control-Allow-Origin", "*")
                             .build();
 
-                    FirebaseCrashlytics.getInstance().log("Built request..");
+
 //                    Response response = client.newCall(request).execute();
 //                    System.out.println(response.body().string());
 
@@ -584,4 +587,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(APP_DATA, this.getPermissionsOfAllApps());
         startActivity(intent);
     }
+
+
 }

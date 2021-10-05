@@ -21,6 +21,8 @@ import java.util.Set;
 
 import static com.devansh.xcapproject.MainActivity.APP_DATA;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 public class UserIdCollector extends AppCompatActivity {
     public Set<String> loadPreferences() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -34,6 +36,7 @@ public class UserIdCollector extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> filterApps(Set<String> allowedApps, HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>> allApps) {
+        FirebaseCrashlytics.getInstance().log("Filtering apps..");
         HashMap<String, String> packageNameToAppNameMap = MainActivity.packageNameToAppNameMap;
         final HashMap<String, String> appNameToPackageNameMap = MainActivity.appNameToPackageNameMap;
 
@@ -44,6 +47,8 @@ public class UserIdCollector extends AppCompatActivity {
                 filtered.put(appPackage, allApps.get(appPackage));
             }
         }
+
+        FirebaseCrashlytics.getInstance().log("Filtering apps completed..");
 
         return filtered;
     }
@@ -61,11 +66,12 @@ public class UserIdCollector extends AppCompatActivity {
             String id = sharedPreferences.getString("XCAP_UNIQUE_ID", "");
             editText.setText(id);
         }
+
         startStudyButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-
+                FirebaseCrashlytics.getInstance().log("Start study selected..");
                 String userId = editText.getText().toString();
 
                 if (userId == null || userId.equals("")) {
@@ -87,6 +93,7 @@ public class UserIdCollector extends AppCompatActivity {
                             (HashMap<String, HashMap<Integer, ArrayList<AndroidPermissions>>>)
                                     getIntent().getSerializableExtra(MainActivity.APP_DATA);
                     appData = filterApps(allowedApps, appData);
+                    FirebaseCrashlytics.getInstance().log("Moving to start study after filtering..");
                     Intent mainIntent = new Intent(UserIdCollector.this, AnotherActivity.class);
                     mainIntent.putExtra(APP_DATA, appData);
                     mainIntent.putExtra("USER_ID", userId);
@@ -103,6 +110,7 @@ public class UserIdCollector extends AppCompatActivity {
                 if (userId == null || userId.equals("")) {
                     userId = null;
                 }
+                FirebaseCrashlytics.getInstance().log("Bug report selection..");
 
                 Intent bugReportIntent = BugReportUtility.getEmailIntent(userId);
                 try {
@@ -122,6 +130,7 @@ public class UserIdCollector extends AppCompatActivity {
         changeAppPreferencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseCrashlytics.getInstance().log("Change app preferences selected..");
 
                 String userId = editText.getText().toString();
                 if (userId == null || userId.equals("")) {
@@ -133,11 +142,15 @@ public class UserIdCollector extends AppCompatActivity {
                 editor.putString("XCAP_UNIQUE_ID", userId);
                 editor.apply();
 
+                FirebaseCrashlytics.getInstance().log("Saved participant ID..");
+
 //                System.out.println(userId);
 
                 Intent mainIntent = new Intent(UserIdCollector.this, AppSelection.class);
+
                 mainIntent.putExtra(APP_DATA, getIntent().getSerializableExtra(MainActivity.APP_DATA));
                 mainIntent.putExtra("USER_ID", userId);
+                FirebaseCrashlytics.getInstance().log("Moving to app selection..");
                 UserIdCollector.this.startActivity(mainIntent);
                 UserIdCollector.this.finish();
             }
